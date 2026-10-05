@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { Icon } from "../components/Icon";
 import { useApp, persistModelNow } from "../state";
 import { Owl, OwlSays, Bar, go, shuffle, Topbar } from "../components/ui";
 import { ItemView } from "../components/ItemView";
@@ -252,8 +253,8 @@ function Results({ startedAt }: { startedAt: number }) {
         </table>
       </div>
       {notes.strong.length > 0 && <div className="card tight"><b className="ok">✓ {tr("Parecen dominadas", "Look solid")}:</b> <span className="small">{notes.strong.join(", ")}</span></div>}
-      {notes.work.length > 0 && <div className="card tight"><b className="bad">✎ {tr("Necesitan trabajo", "Need work")}:</b> <span className="small">{notes.work.join(", ")}</span></div>}
-      {notes.odd.length > 0 && <div className="card tight"><b className="gold">⚠ {tr("Resultados inconsistentes (se volverán a comprobar)", "Inconsistent (will re-check)")}:</b> <span className="small">{notes.odd.join(", ")}</span></div>}
+      {notes.work.length > 0 && <div className="card tight"><b className="bad"><Icon name="edit" size={16} /> {tr("Necesitan trabajo", "Need work")}:</b> <span className="small">{notes.work.join(", ")}</span></div>}
+      {notes.odd.length > 0 && <div className="card tight"><b className="gold"><Icon name="alert" size={16} /> {tr("Resultados inconsistentes (se volverán a comprobar)", "Inconsistent (will re-check)")}:</b> <span className="small">{notes.odd.join(", ")}</span></div>}
       {notes.nodata.length > 0 && <div className="card tight small muted">{tr("Aún sin datos suficientes", "Not enough data")}: {notes.nodata.join(", ")}. {tr("Se medirán mientras estudias.", "Will be measured as you study.")}</div>}
       <div className="card small muted">
         {tr("Este perfil es una primera estimación, no un veredicto. Un diagnóstico de 40 minutos tiene margen de error (por eso algunos niveles aparecen como rango, p. ej. B2+/C1). Cada ejercicio que hagas ajusta el perfil, y las áreas con resultados extraños se vuelven a evaluar automáticamente en tus sesiones.", "This is a first estimate…")}

@@ -38,10 +38,10 @@ Your accent is part of your identity. This module trains what improves **communi
 
 Tip: for /iː/–/ɪ/, length and tenseness both matter: /ɪ/ is shorter and more central.`,
     items: [
-      P("pn-pv1", "pron:vowels", 50, "🔊 Which word did you hear?", ["ship", "sheep"], 0, "/ʃɪp/ — short, lax vowel.", "ship"),
-      P("pn-pv2", "pron:vowels", 50, "🔊 Which word did you hear?", ["live", "leave"], 1, "/liːv/ — long, tense vowel.", "leave"),
-      P("pn-pv3", "pron:vowels", 54, "🔊 Which word did you hear?", ["cat", "cut", "cart"], 1, "/kʌt/.", "cut"),
-      P("pn-pv4", "pron:vowels", 54, "🔊 Which word did you hear?", ["pool", "pull"], 1, "/pʊl/ — short vowel.", "pull"),
+      P("pn-pv1", "pron:vowels", 50, "Which word did you hear?", ["ship", "sheep"], 0, "/ʃɪp/ — short, lax vowel.", "ship"),
+      P("pn-pv2", "pron:vowels", 50, "Which word did you hear?", ["live", "leave"], 1, "/liːv/ — long, tense vowel.", "leave"),
+      P("pn-pv3", "pron:vowels", 54, "Which word did you hear?", ["cat", "cut", "cart"], 1, "/kʌt/.", "cut"),
+      P("pn-pv4", "pron:vowels", 54, "Which word did you hear?", ["pool", "pull"], 1, "/pʊl/ — short vowel.", "pull"),
       P("pn-pv5", "pron:vowels", 58, "Which syllable has a schwa /ə/ in *photographer*?", ["pho-", "-to-", "-gra-", "-pher (and pho-)"], 3, "*pho**TO**grapher* /fəˈtɒɡrəfə/: stress on the 2nd syllable; the 1st and last syllables (and usually the 3rd) are reduced."),
     ],
   },
@@ -55,11 +55,11 @@ Tip: for /iː/–/ɪ/, length and tenseness both matter: /ɪ/ is shorter and mor
 - **-ed endings**: [t] after voiceless sounds (*worked*), [d] after voiced (*analysed*), [ɪd] after /t/ or /d/ (*tested, recorded*).
 - **-s endings**: [s] (*results*), [z] (*findings*), [ɪz] (*analyses* /əˈnæləsiːz/ is special; *classes* [ɪz]).`,
     items: [
-      P("pn-pc1", "pron:consonants", 50, "🔊 Which word did you hear?", ["berry", "very"], 1, "Labiodental /v/.", "very"),
+      P("pn-pc1", "pron:consonants", 50, "Which word did you hear?", ["berry", "very"], 1, "Labiodental /v/.", "very"),
       P("pn-pc2", "pron:consonants", 52, "How is -ed pronounced in *analysed*?", ["/t/", "/d/", "/ɪd/"], 1, "After a voiced sound (/z/) → /d/."),
       P("pn-pc3", "pron:consonants", 52, "How is -ed pronounced in *recorded*?", ["/t/", "/d/", "/ɪd/"], 2, "After /d/ → extra syllable /ɪd/."),
       P("pn-pc4", "pron:consonants", 52, "How is -ed pronounced in *worked*?", ["/t/", "/d/", "/ɪd/"], 0, "After a voiceless sound (/k/) → /t/."),
-      P("pn-pc5", "pron:consonants", 54, "🔊 Which word did you hear?", ["jet", "yet"], 1, "/jɛt/ — a glide, not an affricate.", "yet"),
+      P("pn-pc5", "pron:consonants", 54, "Which word did you hear?", ["jet", "yet"], 1, "/jɛt/ — a glide, not an affricate.", "yet"),
     ],
   },
   {
@@ -99,9 +99,9 @@ Tip: for /iː/–/ɪ/, length and tenseness both matter: /ɪ/ is shorter and mor
 
 Weak forms matter most for **listening**: if you expect the strong form, you'll miss words in fast speech. In your own speech, using them sounds more fluent, but strong forms are still intelligible.`,
     items: [
-      P("pn-pr1", "pron:rhythm", 58, "🔊 In this sentence, how is *can* pronounced?", ["/kæn/ (strong)", "/kən/ (weak)"], 1, "Unstressed modal → weak form.", "We can start at nine."),
+      P("pn-pr1", "pron:rhythm", 58, "In this sentence, how is *can* pronounced?", ["/kæn/ (strong)", "/kən/ (weak)"], 1, "Unstressed modal → weak form.", "We can start at nine."),
       P("pn-pr2", "pron:rhythm", 60, "Which words are normally stressed in *The results of the study were published in a journal*?", ["results, study, published, journal", "the, of, were, in", "all words equally", "only journal"], 0, "Content words carry stress; function words reduce."),
-      gap("pn-pr3", "pron:rhythm", 62, "🔊 Dictation: write the missing word you hear. *I'd like ___ talk about the results.*", ["to"], "Weak form /tə/ — easy to miss.", { skill: "pronunciation", audio: "I'd like to talk about the results.", prompt: "Listen and complete." }),
+      gap("pn-pr3", "pron:rhythm", 62, "Dictation: write the missing word you hear. *I'd like ___ talk about the results.*", ["to"], "Weak form /tə/ — easy to miss.", { skill: "pronunciation", audio: "I'd like to talk about the results.", prompt: "Listen and complete." }),
     ],
   },
   {
@@ -132,7 +132,7 @@ Misplaced nuclear stress is one of the most frequent causes of misunderstanding 
 
 These features explain why you can understand every word in a transcript but miss them in audio.`,
     items: [
-      P("pn-pco1", "pron:connected", 62, "🔊 What phrase did you hear?", ["next day", "neck stay", "necks day", "next stay"], 0, "The /t/ in *next* is often elided before /d/.", "next day"),
+      P("pn-pco1", "pron:connected", 62, "What phrase did you hear?", ["next day", "neck stay", "necks day", "next stay"], 0, "The /t/ in *next* is often elided before /d/.", "next day"),
       P("pn-pco2", "pron:connected", 64, "In *Did you see it?*, what often happens to *did you* in fast speech?", ["/dɪdʒu/ (assimilation)", "/dɪd juː/ always", "It disappears", "/dɪt ju/"], 0, "/d/ + /j/ → /dʒ/ (yod coalescence)."),
     ],
   },

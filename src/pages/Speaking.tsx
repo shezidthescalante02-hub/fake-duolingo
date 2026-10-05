@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Icon } from "../components/Icon";
 import { useApp } from "../state";
 import { Topbar, go, Empty, OwlSays, Bar } from "../components/ui";
 import { SPEAKING_TASKS, PRON_LESSONS } from "../content/index";
@@ -26,7 +27,7 @@ export function SpeakingList() {
               const done = hist.filter((h) => h.taskId === t.id);
               return (
                 <button key={t.id} className="unit" style={{ width: "100%", textAlign: "left" }} onClick={() => go(`#/speaking/${t.id}`)}>
-                  <div className={"node " + (done.length ? "done" : "new")}>🎙️</div>
+                  <div className={"node " + (done.length ? "done" : "new")}><Icon name="mic" size={22} /></div>
                   <div className="grow">
                     <div className="serif">{t.title}</div>
                     <div className="tiny muted">{lvlLabel(t.lvl)} · {t.speakSec}s{done.length ? ` · ${done.length}×` : ""}</div>
@@ -79,10 +80,10 @@ export function PronPage() {
           </button>
         );
       })}
-      <div className="section-title">🎙️ {tr("Repetir y medir inteligibilidad", "Repeat & measure")}</div>
+      <div className="section-title"><Icon name="mic" size={16} /> {tr("Repetir y medir inteligibilidad", "Repeat & measure")}</div>
       {SPEAKING_TASKS.filter((t) => t.type === "repeat").map((t) => (
         <button key={t.id} className="unit" style={{ width: "100%", textAlign: "left" }} onClick={() => go(`#/speaking/${t.id}`)}>
-          <div className="node new">🔁</div><div className="grow"><div className="serif small">{t.target}</div><div className="tiny muted">{lvlLabel(t.lvl)}</div></div>
+          <div className="node new"><Icon name="repeat" size={22} /></div><div className="grow"><div className="serif small">{t.target}</div><div className="tiny muted">{lvlLabel(t.lvl)}</div></div>
         </button>
       ))}
     </div>

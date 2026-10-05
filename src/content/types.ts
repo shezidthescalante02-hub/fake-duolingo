@@ -43,7 +43,8 @@ export const TRAP_LABEL: Record<Trap, string> = {
   misheard: "Sonido parecido (trampa auditiva)",
 };
 
-export type ItemKind = "mcq" | "gap" | "kwt" | "wf" | "judge" | "order" | "spot" | "produce" | "ctest" | "tf";
+export type ItemKind = "mcq" | "gap" | "kwt" | "wf" | "judge" | "order" | "spot" | "produce" | "ctest" | "tf"
+  | "match" | "sort" | "odd" | "fix" | "dictation" | "stress" | "recall";
 
 export interface BaseItem {
   id: string;
@@ -132,7 +133,50 @@ export interface CTestItem extends BaseItem {
   text: string;            // palabras incompletas con formato {vis|falt}
 }
 
-export type Item = MCQItem | TFItem | GapItem | KWTItem | WFItem | JudgeItem | OrderItem | SpotItem | ProduceItem | CTestItem;
+export interface MatchItem extends BaseItem {
+  kind: "match"; // unir parejas (palabra ↔ definición, verbo ↔ sustantivo…)
+  pairs: [string, string][];
+  heads?: [string, string];
+}
+export interface SortItem extends BaseItem {
+  kind: "sort"; // clasificar en categorías
+  cats: string[];
+  entries: [string, number][]; // [texto, índice de categoría]
+}
+export interface OddItem extends BaseItem {
+  kind: "odd"; // ¿cuál no encaja?
+  options: string[];
+  answer: number;
+}
+export interface FixItem extends BaseItem {
+  kind: "fix"; // encontrar el error y corregirlo
+  sentence: string;
+  wrong: string;           // fragmento exacto que contiene el error (aparece una sola vez)
+  answers: string[];       // correcciones aceptadas para ese fragmento
+}
+export interface DictationItem extends BaseItem {
+  kind: "dictation";
+  text: string;
+  accent?: string;
+}
+export interface StressItem extends BaseItem {
+  kind: "stress"; // sílaba con acento primario
+  word: string;
+  syl: number;             // número de sílabas
+  answer: number;          // índice (0 = primera)
+  ipa: string;
+  ipaGB?: string;
+}
+export interface RecallItem extends BaseItem {
+  kind: "recall"; // escribir la palabra a partir de definición/contexto con la primera letra
+  text: string;            // oración con ___
+  word: string;            // palabra esperada (forma exacta en la oración)
+  answers: string[];
+  def?: string;
+}
+
+export type Item = MCQItem | TFItem | GapItem | KWTItem | WFItem | JudgeItem | OrderItem | SpotItem | ProduceItem | CTestItem
+  | MatchItem | SortItem | OddItem | FixItem | DictationItem | StressItem | RecallItem;
 
 export interface Example { t: string; k?: "good" | "bad" | "meh"; note?: string }
 

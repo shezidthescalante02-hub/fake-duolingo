@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Icon } from "./Icon";
 import type { ListeningSet } from "../content/types";
 import { ItemView, type ItemResult } from "./ItemView";
 import { Tap, Md } from "./ui";
@@ -65,7 +66,7 @@ export function ListeningRunner({ set, mode = "practice", plays, onDone, exam, q
               {fromLine > 0 && practice && <button className="btn ghost" disabled={played >= maxPlays} onClick={() => { setFromLine(0); play(true); }}>↺ {tr("Desde el inicio", "From start")}</button>}
             </>
           ) : (
-            canPause ? <button className="btn" onClick={pause}>⏸ {tr("Pausa", "Pause")}</button> : <span className="tag gold">🔊 {tr("Reproduciendo… (sin pausa en simulación)", "Playing… (no pause in simulation)")}</span>
+            canPause ? <button className="btn" onClick={pause}><Icon name="pause" size={16} /> {tr("Pausa", "Pause")}</button> : <span className="tag gold"><Icon name="speaker" size={16} /> {tr("Reproduciendo… (sin pausa en simulación)", "Playing… (no pause in simulation)")}</span>
           )}
         </div>
         {practice && (
@@ -74,14 +75,14 @@ export function ListeningRunner({ set, mode = "practice", plays, onDone, exam, q
               {SPEEDS.map((s) => <button key={s} className={"chip " + (rate === s ? "on" : "")} disabled={playing} onClick={() => { setRate(s); if (s >= 1.5) bump("fastListening"); }}>{s}x</button>)}
             </div>
             <div className="chips" style={{ marginTop: 8 }}>
-              <button className={"chip " + (view === "none" ? "on" : "")} onClick={() => setView("none")}>🎧 {tr("Solo audio", "Audio only")}</button>
-              <button className={"chip " + (view === "transcript" ? "on" : "")} disabled={!transcriptAllowed} onClick={() => setView("transcript")}>📝 {tr("Audio + transcript", "Audio + transcript")}</button>
-              <button className={"chip " + (view === "explain" ? "on" : "")} disabled={!audioDone || lock.transcript} onClick={() => setView("explain")}>🧑‍🏫 Transcript + {tr("explicación", "explanation")}</button>
+              <button className={"chip " + (view === "none" ? "on" : "")} onClick={() => setView("none")}><Icon name="headphones" size={16} /> {tr("Solo audio", "Audio only")}</button>
+              <button className={"chip " + (view === "transcript" ? "on" : "")} disabled={!transcriptAllowed} onClick={() => setView("transcript")}><Icon name="text" size={16} /> {tr("Audio + transcript", "Audio + transcript")}</button>
+              <button className={"chip " + (view === "explain" ? "on" : "")} disabled={!audioDone || lock.transcript} onClick={() => setView("explain")}><Icon name="teacher" size={16} /> Transcript + {tr("explicación", "explanation")}</button>
             </div>
             {!transcriptAllowed && <div className="tiny muted" style={{ marginTop: 4 }}>{tr("El transcript se desbloquea al terminar el audio (en este modo de dificultad).", "Transcript unlocks after listening in this mode.")}</div>}
           </>
         )}
-        {!practice && <div className="lock" style={{ marginTop: 10 }}>🔒 {tr("Condiciones de examen: sin transcript, sin cambio de velocidad", "Exam conditions")}{maxPlays > 1 ? ` · ${tr("se escucha", "heard")} ${maxPlays} ${tr("veces", "times")}` : ` · ${tr("se escucha una vez", "heard once")}`}</div>}
+        {!practice && <div className="lock" style={{ marginTop: 10 }}><Icon name="lock" size={16} /> {tr("Condiciones de examen: sin transcript, sin cambio de velocidad", "Exam conditions")}{maxPlays > 1 ? ` · ${tr("se escucha", "heard")} ${maxPlays} ${tr("veces", "times")}` : ` · ${tr("se escucha una vez", "heard once")}`}</div>}
         {(view !== "none") && practice && (
           <div className="card flat tight" style={{ marginTop: 10 }}>
             {set.lines.map((l, i) => (
@@ -93,7 +94,7 @@ export function ListeningRunner({ set, mode = "practice", plays, onDone, exam, q
         )}
         {view === "explain" && practice && (
           <div className="card flat tight">
-            <h3>🧑‍🏫 {tr("Claves de comprensión", "Comprehension keys")}</h3>
+            <h3><Icon name="teacher" size={16} /> {tr("Claves de comprensión", "Comprehension keys")}</h3>
             {set.questions.map((qq, i) => (
               <div key={qq.id} className="small" style={{ margin: "8px 0" }}><b>Q{i + 1}.</b> <Md text={qq.explain || ""} inline /></div>
             ))}
@@ -104,7 +105,7 @@ export function ListeningRunner({ set, mode = "practice", plays, onDone, exam, q
 
       {practice && !audioDone && (
         <div className="card flat">
-          <div className="small gold" style={{ marginBottom: 6 }}>👀 {tr("Lee las preguntas antes de escuchar (como en el examen). Respondes al terminar el audio.", "Preview the questions first.")}</div>
+          <div className="small gold" style={{ marginBottom: 6 }}><Icon name="eye" size={16} /> {tr("Lee las preguntas antes de escuchar (como en el examen). Respondes al terminar el audio.", "Preview the questions first.")}</div>
           {set.questions.map((qq, i) => <div key={qq.id} className="small" style={{ margin: "4px 0" }}><b>{i + 1}.</b> {(qq as any).prompt || (qq as any).text}</div>)}
         </div>
       )}

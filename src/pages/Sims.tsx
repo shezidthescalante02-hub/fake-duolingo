@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { Icon } from "../components/Icon";
 import { useApp } from "../state";
 import { Topbar, go, OwlSays, Timer, useCountdown, Empty, Bar, Md } from "../components/ui";
 import { EXAMS, examById } from "../content/exams/index";
@@ -76,7 +77,7 @@ export function SimRunner({ exam, section }: { exam: string; section?: string })
         <h3>{section ? sections[0]?.name : tr("Examen completo", "Full exam")}</h3>
         {sections.map((s) => <div key={s.id} className="row between small" style={{ margin: "4px 0" }}><span>{s.name}</span><span>{s.minutes} min</span></div>)}
         <div className="hr" />
-        <div className="small">🔒 {tr("Diccionario bloqueado · sin transcripts · sin Professor Mode · audio sin pausa · temporizador por sección. Al acabarse el tiempo, la sección se cierra.", "Exam conditions apply.")}</div>
+        <div className="small"><Icon name="lock" size={16} /> {tr("Diccionario bloqueado · sin transcripts · sin Professor Mode · audio sin pausa · temporizador por sección. Al acabarse el tiempo, la sección se cierra.", "Exam conditions apply.")}</div>
         <div className="small muted" style={{ marginTop: 6 }}>{tr("Puedes tocar palabras para guardarlas en tu vocabulario (sin ver la definición) y estudiarlas después.", "You can save words for later.")}</div>
       </div>
       <button className="btn primary block" onClick={() => setSi(0)}>{tr("Comenzar", "Start")}</button>
@@ -290,10 +291,10 @@ export function SimResult({ id }: { id: string }) {
       )}
       {weakest.length > 0 && (
         <div className="card">
-          <h3>🔎 {tr("Análisis", "Analysis")}</h3>
+          <h3><Icon name="search" size={16} /> {tr("Análisis", "Analysis")}</h3>
           <div className="small">{tr("Partes con menor rendimiento", "Weakest parts")}: {weakest.map((w) => w.name).join(" · ")}</div>
           <div className="small muted" style={{ marginTop: 6 }}>{tr("Tus errores de esta simulación ya alimentan tu perfil: en las próximas sesiones verás más práctica de esos tipos de pregunta y de las trampas en las que caíste. Revisa Estrategia para ver si hubo sobreanálisis o problemas de tiempo.", "Errors feed your profile.")}</div>
-          {rec.sections.some((s: SectionResult) => s.timeUp) && <div className="small gold" style={{ marginTop: 6 }}>⏱ {tr("Se te acabó el tiempo en al menos una sección: practica la gestión del tiempo (Estrategia → Timing).", "Time ran out in a section.")}</div>}
+          {rec.sections.some((s: SectionResult) => s.timeUp) && <div className="small gold" style={{ marginTop: 6 }}><Icon name="clock" size={16} /> {tr("Se te acabó el tiempo en al menos una sección: practica la gestión del tiempo (Estrategia → Timing).", "Time ran out in a section.")}</div>}
           <div className="row" style={{ marginTop: 10 }}>
             <button className="btn sm" onClick={() => go("#/strategy")}>{tr("Ver estrategia", "Strategy")}</button>
             <button className="btn sm" onClick={() => go("#/dashboard")}>Dashboard</button>

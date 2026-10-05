@@ -3,29 +3,31 @@ import { useApp } from "../state";
 import { owlSvg, type OwlMood } from "../owl/owlSvg";
 import { OWL_COLORS } from "../engine/game";
 import { bandProgress } from "../engine/cefr";
+import { Icon } from "./Icon";
 
 // ---------------------------------------------------------------- búho
-export function Owl({ mood = "smug", size = 80, anim = "bob", blinkable = true }: { mood?: OwlMood | string; size?: number; anim?: "bob" | "shake" | "hop" | "none"; blinkable?: boolean }) {
+export function Owl({ mood = "smug", size = 80, anim = "bob", talking = false, perch }: { mood?: OwlMood | string; size?: number; anim?: "bob" | "shake" | "hop" | "none" | "idle"; blinkable?: boolean; talking?: boolean; perch?: boolean }) {
   const { settings } = useApp();
-  const [blink, setBlink] = useState(false);
-  useEffect(() => {
-    if (!blinkable) return;
-    let t: any;
-    const loop = () => { t = setTimeout(() => { setBlink(true); setTimeout(() => setBlink(false), 140); loop(); }, 2800 + Math.random() * 3500); };
-    loop();
-    return () => clearTimeout(t);
-  }, [blinkable]);
-  const html = useMemo(() => owlSvg({ mood: mood as OwlMood, body: OWL_COLORS[settings.owlColor] || OWL_COLORS.crimson, accessory: settings.owlAccessory, blink: blink && mood !== "happy" }), [mood, settings.owlColor, settings.owlAccessory, blink]);
-  return <div className={`owl ${anim !== "none" ? anim : ""}`} style={{ width: size }} dangerouslySetInnerHTML={{ __html: html }} />;
+  const delay = useMemo(() => (-Math.random() * 5).toFixed(2) + "s", []);
+  const showPerch = perch ?? size >= 84;
+  const html = useMemo(() => owlSvg({ mood: mood as OwlMood, body: OWL_COLORS[settings.owlColor] || OWL_COLORS.crimson, accessory: settings.owlAccessory, perch: showPerch, still: size < 48 }), [mood, settings.owlColor, settings.owlAccessory, showPerch, size]);
+  const [enter, setEnter] = useState(false);
+  const first = useRef(true);
+  useEffect(() => { if (first.current) { first.current = false; return; } setEnter(true); const t = setTimeout(() => setEnter(false), 520); return () => clearTimeout(t); }, [mood]);
+  const animated = anim !== "none" && size >= 40;
+  const cls = ["owl", "mood-" + mood, animated ? "anim" : "", anim === "bob" ? "bob" : anim === "shake" ? "shake" : anim === "hop" ? "hop" : "", talking ? "talking" : "", enter ? "enter" : ""].join(" ");
+  return <div className={cls} style={{ width: size, ["--bd" as any]: delay }} dangerouslySetInnerHTML={{ __html: html }} />;
 }
 
 export function OwlSays({ text, gloss, mood = "smug", size = 74 }: { text: string; gloss?: string; mood?: string; size?: number }) {
+  const [talk, setTalk] = useState(true);
+  useEffect(() => { setTalk(true); const t = setTimeout(() => setTalk(false), 1600); return () => clearTimeout(t); }, [text]);
   return (
-    <div className="owlrow fadein">
-      <Owl mood={mood} size={size} />
-      <div className="speech grow">
+    <div className="owlrow">
+      <Owl mood={mood} size={size} talking={talk} anim="idle" />
+      <div className="speech grow" key={text}>
         <Md text={text} inline />
-        {gloss && <span className="gloss">📖 {gloss}</span>}
+        {gloss && <span className="gloss"><Icon name="book" size={14} /> <span>{gloss}</span></span>}
       </div>
     </div>
   );
@@ -151,7 +153,7 @@ export function Topbar({ title, back, right }: { title: string; back?: string | 
   return (
     <div className="topbar">
       {back !== undefined && back !== false && (
-        <button className="iconbtn" aria-label="Atrás" onClick={() => (typeof back === "string" ? (location.hash = back) : history.back())}>←</button>
+        <button className="iconbtn" aria-label="Atrás" onClick={() => (typeof back === "string" ? (location.hash = back) : history.back())}><Icon name="back" size={20} /></button>
       )}
       <h1>{title}</h1>
       {right}
@@ -207,12 +209,12 @@ export function fmtTime(sec: number) {
 
 export function Timer({ left, total }: { left: number; total: number }) {
   const cls = left <= Math.min(30, total * 0.1) ? "crit" : left <= total * 0.25 ? "warn" : "";
-  return <span className={"timer " + cls}>⏱ {fmtTime(left)}</span>;
+  return <span className={"timer " + cls}><Icon name="clock" size={14} /> {fmtTime(left)}</span>;
 }
 
 export function Confetti() {
-  const pieces = useMemo(() => Array.from({ length: 60 }, (_, i) => ({ left: Math.random() * 100, delay: Math.random() * 0.4, color: ["#d8a640", "#a82b3d", "#efe4d2", "#6fae7b", "#b192d6"][i % 5] })), []);
-  return <div className="confetti">{pieces.map((p, i) => <i key={i} style={{ left: p.left + "%", animationDelay: p.delay + "s", background: p.color }} />)}</div>;
+  const pieces = useMemo(() => Array.from({ length: 70 }, (_, i) => ({ left: Math.random() * 100, delay: Math.random() * 0.5, dx: (Math.random() - 0.5) * 160, rot: 360 + Math.random() * 720, color: ["#ecc978", "#b6334a", "#f1e6d4", "#7cba86", "#d2a54b", "#8a1b2c"][i % 6] })), []);
+  return <div className="confetti">{pieces.map((p, i) => <i key={i} style={{ left: p.left + "%", animationDelay: p.delay + "s", background: p.color, ["--dx" as any]: p.dx + "px", ["--rot" as any]: p.rot + "deg" }} />)}</div>;
 }
 
 export function Empty({ children }: { children: React.ReactNode }) { return <div className="empty">{children}</div>; }
@@ -226,3 +228,44 @@ export function shuffle<T>(arr: T[]): T[] {
 }
 
 export function go(hash: string) { location.hash = hash; }
+
+// ---------------------------------------------------------------- anillo de progreso
+export function Ring({ pct, size = 96, stroke = 8, children, color }: { pct: number; size?: number; stroke?: number; children?: React.ReactNode; color?: "gold" | "red" | "green" }) {
+  const r = (size - stroke) / 2, c = 2 * Math.PI * r;
+  const [shown, setShown] = useState(0);
+  useEffect(() => { const t = setTimeout(() => setShown(Math.max(0, Math.min(100, pct))), 60); return () => clearTimeout(t); }, [pct]);
+  const id = useMemo(() => "rg" + Math.random().toString(36).slice(2, 7), []);
+  const stops = color === "green" ? ["#3f7c4b", "#a6dcae"] : color === "red" ? ["#8a1b2c", "#e2677a"] : ["#9c711d", "#f7e3b0"];
+  return (
+    <div className="ring" style={{ width: size, height: size }}>
+      <svg width={size} height={size}>
+        <defs><linearGradient id={id} x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stopColor={stops[0]} /><stop offset="100%" stopColor={stops[1]} /></linearGradient></defs>
+        <circle className="ring-bg" cx={size / 2} cy={size / 2} r={r} fill="none" strokeWidth={stroke} />
+        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={`url(#${id})`} strokeWidth={stroke} strokeLinecap="round"
+          strokeDasharray={c} strokeDashoffset={c * (1 - shown / 100)} style={{ transition: "stroke-dashoffset 1.2s cubic-bezier(.22,.9,.3,1)" }} />
+      </svg>
+      <div className="ring-label">{children}</div>
+    </div>
+  );
+}
+
+export function CountUp({ to, ms = 900, suffix = "" }: { to: number; ms?: number; suffix?: string }) {
+  const [v, setV] = useState(0);
+  useEffect(() => {
+    let raf = 0; const t0 = performance.now();
+    const step = (t: number) => { const k = Math.min(1, (t - t0) / ms); setV(Math.round(to * (1 - Math.pow(1 - k, 3)))); if (k < 1) raf = requestAnimationFrame(step); };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [to]);
+  return <span className="count-up">{v}{suffix}</span>;
+}
+
+export function XpFloat() {
+  const [items, setItems] = useState<{ id: number; xp: number }[]>([]);
+  useEffect(() => {
+    const f = (e: any) => { const id = Date.now() + Math.random(); setItems((a) => [...a.slice(-2), { id, xp: e.detail }]); setTimeout(() => setItems((a) => a.filter((x) => x.id !== id)), 1200); };
+    window.addEventListener("fx:xp", f);
+    return () => window.removeEventListener("fx:xp", f);
+  }, []);
+  return <>{items.map((x) => <div key={x.id} className="xp-float">+{x.xp} XP</div>)}</>;
+}

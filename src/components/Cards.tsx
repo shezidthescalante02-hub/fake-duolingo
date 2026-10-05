@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { Icon, iconForTag } from "./Icon";
 import type { Lesson } from "../content/types";
 import { Md, Tap, OwlSays, shuffle } from "./ui";
 import { useApp } from "../state";
@@ -16,7 +17,7 @@ export function TeachCard({ lesson, onDone }: { lesson: Lesson; onDone: () => vo
   return (
     <div className="fadein">
       <div className="row" style={{ marginBottom: 6 }}>
-        <span style={{ fontSize: 28 }}>{lesson.icon || "📘"}</span>
+        <span className="mini-ico" style={{ width: 44, height: 44 }}><Icon name={iconForTag(lesson.tag)} size={24} /></span>
         <div className="grow">
           <div className="tiny muted">{tr("Nuevo concepto", "New concept")} · {lesson.group || lesson.module}</div>
           <div className="serif" style={{ fontSize: "1.3em" }}>{lesson.title}</div>
@@ -106,7 +107,7 @@ export function VocabCard({ word, mode, onDone }: { word: VocabEntry; mode: "rec
         <>
           <div className="center" style={{ margin: "14px 0" }}>
             <div className="serif" style={{ fontSize: "2em" }}>{word.w}</div>
-            <div className="small muted">{word.pos}{word.ipa ? ` · /${word.ipa}/` : ""} <button className="btn xs ghost" onClick={() => speak(word.w, { accent: settings.accents[0] })}>🔊</button></div>
+            <div className="small muted">{word.pos}{word.ipa ? ` · /${word.ipa}/` : ""} <button className="btn xs ghost" onClick={() => speak(word.w, { accent: settings.accents[0] })}><Icon name="speaker" size={16} /></button></div>
             {word.ctx && <div className="small serif muted" style={{ marginTop: 6 }}>“{word.ctx}”</div>}
           </div>
           {options.length >= 3 ? options.map((o, i) => (
@@ -137,7 +138,7 @@ export function VocabCard({ word, mode, onDone }: { word: VocabEntry; mode: "rec
           {!result && mode === "recog" && <div className="small">{def}</div>}
           {word.ex && <div className="ex">{word.ex}</div>}
           {word.col && word.col.length > 0 && <div className="small"><b>Collocations:</b> {word.col.join(" · ")}</div>}
-          {word.note && <div className="small" style={{ marginTop: 4 }}>💡 <Md text={word.note} inline /></div>}
+          {word.note && <div className="small" style={{ marginTop: 4 }}><Icon name="bulb" size={16} /> <Md text={word.note} inline /></div>}
         </div>
       )}
       <div className="sticky-actions">

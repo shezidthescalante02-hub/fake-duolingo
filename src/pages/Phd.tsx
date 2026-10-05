@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Icon } from "../components/Icon";
 import { useApp } from "../state";
 import { Topbar, go, Empty, OwlSays, Md, Owl } from "../components/ui";
 import { PHD_SCENARIOS } from "../content/index";
@@ -16,7 +17,7 @@ export function PhdList() {
       <OwlSays text="Supervisors, seminars, reviewers, vivas. I'll play all of them. Some of them are nicer than me. Most aren't." mood="smug" size={60} />
       {PHD_SCENARIOS.map((s) => (
         <button key={s.id} className="unit" style={{ width: "100%", textAlign: "left" }} onClick={() => go(`#/phd/${s.id}`)}>
-          <div className="node">{s.mode === "write" ? "✒️" : "🎓"}</div>
+          <div className="node"><Icon name={s.mode === "write" ? "quill" : "scroll"} size={22} /></div>
           <div className="grow"><div className="serif">{s.title}</div><div className="tiny muted">{s.setting} · {lvlLabel(s.lvl)}</div></div>
         </button>
       ))}
@@ -44,7 +45,7 @@ export function PhdPage({ id }: { id: string }) {
       const ans = await generate({ system: sys, parts: [{ text: next[next.length - 1].text }], history: chat, temperature: 0.7 });
       setChat([...next, { role: "model", text: ans }]);
       if (next.filter((m) => m.role === "user").length >= 4) addXp(30, { phd: 1 });
-    } catch (e: any) { setChat([...next, { role: "model", text: "⚠️ " + (e.message || e) }]); } finally { setBusy(false); }
+    } catch (e: any) { setChat([...next, { role: "model", text: "Error: " + (e.message || e) }]); } finally { setBusy(false); }
   };
 
   return (
@@ -55,7 +56,7 @@ export function PhdPage({ id }: { id: string }) {
         {sc.turns.map((t, i) => (
           <div key={i} className="row" style={{ alignItems: "flex-start", margin: "10px 0" }}>
             <Owl mood="thinking" size={44} anim="none" />
-            <div className="speech grow"><b className="small">{t.who}:</b> <span className="serif">{t.say}</span> <button className="btn xs ghost" onClick={() => speak(t.say, { accent: "en-GB" })}>🔊</button></div>
+            <div className="speech grow"><b className="small">{t.who}:</b> <span className="serif">{t.say}</span> <button className="btn xs ghost" onClick={() => speak(t.say, { accent: "en-GB" })}><Icon name="speaker" size={16} /></button></div>
           </div>
         ))}
         <div className="feedback neutral"><b>{tr("Tu tarea", "Your task")}:</b> <Md text={sc.task} inline /></div>
@@ -63,17 +64,17 @@ export function PhdPage({ id }: { id: string }) {
       {mode === "brief" && (
         <>
           <div className="card">
-            <h3>💬 {tr("Expresiones útiles", "Useful language")}</h3>
+            <h3><Icon name="text" size={16} /> {tr("Expresiones útiles", "Useful language")}</h3>
             {sc.phrases.map((p) => (
               <div key={p.label} style={{ margin: "6px 0" }}><div className="small gold">{p.label}</div>{p.items.map((x) => <div key={x} className="small serif">• {x}</div>)}</div>
             ))}
             {sc.pitfalls && <><div className="hr" />{sc.pitfalls.map((e, i) => <div key={i} className={"ex " + (e.k || "good")}>{e.t}{e.note && <div className="tiny muted">{e.note}</div>}</div>)}</>}
           </div>
           <div className="grid2">
-            {sc.mode !== "write" && <button className="btn primary" onClick={() => setMode("speak")}>🎙️ {tr("Responder hablando", "Speak")}</button>}
-            {sc.mode !== "speak" && <button className="btn primary" onClick={() => setMode("write")}>✒️ {tr("Responder por escrito", "Write")}</button>}
-            {sc.mode === "speak" && <button className="btn" onClick={() => setMode("write")}>✒️ {tr("Por escrito", "In writing")}</button>}
-            <button className="btn" disabled={!aiReady()} onClick={() => setMode("roleplay")}>🤖 {tr("Conversación con IA", "AI roleplay")}</button>
+            {sc.mode !== "write" && <button className="btn primary" onClick={() => setMode("speak")}><Icon name="mic" size={16} /> {tr("Responder hablando", "Speak")}</button>}
+            {sc.mode !== "speak" && <button className="btn primary" onClick={() => setMode("write")}><Icon name="quill" size={16} /> {tr("Responder por escrito", "Write")}</button>}
+            {sc.mode === "speak" && <button className="btn" onClick={() => setMode("write")}><Icon name="quill" size={16} /> {tr("Por escrito", "In writing")}</button>}
+            <button className="btn" disabled={!aiReady()} onClick={() => setMode("roleplay")}><Icon name="sparkle" size={16} /> {tr("Conversación con IA", "AI roleplay")}</button>
           </div>
           {!aiReady() && <div className="tiny muted" style={{ marginTop: 6 }}>{tr("La conversación con IA necesita una clave gratuita de Gemini y conexión.", "AI roleplay needs a Gemini key.")}</div>}
         </>
@@ -94,7 +95,7 @@ export function PhdPage({ id }: { id: string }) {
       )}
       {mode === "done" && (
         <div>
-          {sc.model && <details className="card"><summary>📜 {tr("Respuesta modelo", "Model answer")}</summary><div className="serif small" style={{ marginTop: 8 }}>{sc.model}</div></details>}
+          {sc.model && <details className="card"><summary><Icon name="scroll" size={16} /> {tr("Respuesta modelo", "Model answer")}</summary><div className="serif small" style={{ marginTop: 8 }}>{sc.model}</div></details>}
           <button className="btn primary block" onClick={() => go("#/phd")}>{tr("Otro escenario", "Another scenario")}</button>
         </div>
       )}

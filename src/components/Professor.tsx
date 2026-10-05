@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Icon } from "./Icon";
 import type { Item } from "../content/types";
 import { Md, Sheet, Owl } from "./ui";
 import { useApp } from "../state";
@@ -19,6 +20,13 @@ export function itemToText(item: Item, resp?: any): string {
     case "order": lines.push(`Target: ${item.tokens.join(" ")}`); break;
     case "ctest": lines.push(`C-test: ${item.text}`); break;
     case "produce": lines.push(`Task: ${item.task}`); if (resp?.text) lines.push("Learner text: " + resp.text); break;
+    case "match": lines.push("Pairs: " + item.pairs.map(([a, b]) => `${a} = ${b}`).join("; ")); break;
+    case "sort": lines.push(`Categories: ${item.cats.join(" / ")}\nEntries: ` + item.entries.map(([t, c]) => `${t} -> ${item.cats[c]}`).join("; ")); break;
+    case "odd": item.options.forEach((o, i) => lines.push(`${String.fromCharCode(65 + i)}. ${o}${i === item.answer ? "  [odd one out]" : ""}`)); break;
+    case "fix": lines.push(`Sentence: ${item.sentence}\nError: "${item.wrong}" -> ${item.answers.join(" / ")}`); if (resp?.text) lines.push("Learner correction: " + resp.text); break;
+    case "dictation": lines.push("Dictation text: " + item.text); if (resp) lines.push("Learner typed: " + resp); break;
+    case "stress": lines.push(`Word: ${item.word}; IPA: /${item.ipa}/; primary stress on syllable ${item.answer + 1} of ${item.syl}`); break;
+    case "recall": lines.push(`Sentence: ${item.text} | answer: ${item.word}`); if (resp) lines.push("Learner wrote: " + resp); break;
   }
   lines.push("Explanation in app: " + item.explain);
   return lines.join("\n");
@@ -87,9 +95,9 @@ export function ProfessorSheet({ open, onClose, item, resp, checked, context, on
           <div className="serif" style={{ fontSize: "1.2em" }}>Professor Mode</div>
           <div className="tiny muted">{aiReady() ? tr("IA conectada (Gemini) + banco de explicaciones", "AI connected") : tr("Modo offline: explicaciones del banco de contenido", "Offline explanations")}</div>
         </div>
-        <button className="iconbtn" onClick={onClose}>✕</button>
+        <button className="iconbtn" onClick={onClose}><Icon name="x" size={19} /></button>
       </div>
-      {lock.professor ? <div className="empty">🔒 {tr("No disponible durante simulaciones.", "Not available during simulations.")}</div> : !checked ? (
+      {lock.professor ? <div className="empty"><Icon name="lock" size={16} /> {tr("No disponible durante simulaciones.", "Not available during simulations.")}</div> : !checked ? (
         <div className="empty">{tr("Primero responde la pregunta. El profesor no da spoilers.", "Answer first. No spoilers.")}</div>
       ) : (
         <>
@@ -100,7 +108,7 @@ export function ProfessorSheet({ open, onClose, item, resp, checked, context, on
             <div className="card flat tight">
               <Md text={item.explain} />
               {item.deep && <><div className="hr" /><div className="small gold">{tr("Nivel avanzado", "Advanced")}</div><Md text={item.deep} /></>}
-              {lesson && <div style={{ marginTop: 8 }}><a href={`#/lesson/${lesson.id}`} onClick={onClose}>📘 {tr("Abrir la lección", "Open lesson")}: {lesson.title}</a></div>}
+              {lesson && <div style={{ marginTop: 8 }}><a href={`#/lesson/${lesson.id}`} onClick={onClose}><Icon name="learn" size={16} /> {tr("Abrir la lección", "Open lesson")}: {lesson.title}</a></div>}
             </div>
           )}
           {chat.map((m, i) => (

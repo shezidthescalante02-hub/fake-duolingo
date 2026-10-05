@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { useApp } from "../state";
-import { Topbar, go, Bar, Md, OwlSays, Empty } from "../components/ui";
+import { Topbar, go, Bar, Md, OwlSays, Empty, Owl, shuffle } from "../components/ui";
 import { GRAMMAR_LESSONS, UOE_LESSONS, ACADEMIC_LESSONS, lessonById, itemsForTag, tagName, addCustomItems, lessonForTag } from "../content/index";
 import type { Lesson, Item } from "../content/types";
 import { tagState, tagStatus, errorPattern, receptiveVsProductive } from "../engine/model";
@@ -10,23 +10,26 @@ import { ItemView } from "../components/ItemView";
 import { pickItems } from "../engine/session";
 import { aiReady, generateItems } from "../services/ai";
 import { skillOf } from "../content/helpers";
+import { Icon, iconForTag } from "../components/Icon";
+import { generate, modeForTag } from "../engine/generator";
 
 const MODULES = [
-  { h: "#/grammar", i: "🧩", t: "Grammar", s: "B2+ → C2", skill: "grammar" },
-  { h: "#/uoe", i: "🔑", t: "Use of English", s: "KWT, word formation, cloze", skill: "useOfEnglish" },
-  { h: "#/vocab", i: "🗂️", t: "Vocabulary", s: "SRS · activo vs. pasivo", skill: "vocabulary" },
-  { h: "#/reading", i: "📖", t: "Reading", s: "Read like a researcher", skill: "reading", skip: "reading" },
-  { h: "#/listening", i: "🎧", t: "Listening", s: "0.75x → 2x · acentos", skill: "listening", skip: "listening" },
-  { h: "#/writing", i: "✒️", t: "Writing", s: "★ prioridad principal", skill: "academicWriting", skip: "writing" },
-  { h: "#/speaking", i: "🎙️", t: "Speaking", s: "examen + académico", skill: "speaking", skip: "speaking" },
-  { h: "#/pron", i: "🔊", t: "Pronunciation", s: "opcional · inteligibilidad", skill: "pronunciation", skip: "pronunciation" },
-  { h: "#/academic", i: "🏛️", t: "Academic English", s: "hedging, stance, síntesis", skill: "academicWriting" },
-  { h: "#/phd", i: "🎓", t: "PhD Mode", s: "supervisor, seminarios, viva", skill: "speaking" },
-  { h: "#/strategy", i: "🪤", t: "Exam Strategy", s: "distractores · sobreanálisis", skill: "strategy" },
-  { h: "#/reading?d=culture", i: "🌍", t: "Cultura general", s: "ciencia, historia, arte…", skill: "reading" },
-  { h: "#/professor", i: "🧑‍🏫", t: "Professor Mode", s: "pregunta lo que quieras", skill: "" },
-  { h: "#/dict", i: "🔎", t: "Diccionario", s: "76 000 entradas offline", skill: "" },
-  { h: "#/generate", i: "✨", t: "Generar contenido", s: "IA opcional (Gemini)", skill: "" },
+  { h: "#/endless", i: "infinity", t: "Práctica infinita", s: "nunca se acaba", skill: "" },
+  { h: "#/grammar", i: "puzzle", t: "Grammar", s: "B2+ → C2", skill: "grammar" },
+  { h: "#/uoe", i: "key", t: "Use of English", s: "KWT, word formation, cloze", skill: "useOfEnglish" },
+  { h: "#/vocab", i: "cards", t: "Vocabulary", s: "SRS · activo vs. pasivo", skill: "vocabulary" },
+  { h: "#/reading", i: "book", t: "Reading", s: "Read like a researcher", skill: "reading", skip: "reading" },
+  { h: "#/listening", i: "headphones", t: "Listening", s: "0.75x → 2x · acentos", skill: "listening", skip: "listening" },
+  { h: "#/writing", i: "quill", t: "Writing", s: "prioridad principal", skill: "academicWriting", skip: "writing" },
+  { h: "#/speaking", i: "mic", t: "Speaking", s: "examen + académico", skill: "speaking", skip: "speaking" },
+  { h: "#/pron", i: "speaker", t: "Pronunciation", s: "opcional · inteligibilidad", skill: "pronunciation", skip: "pronunciation" },
+  { h: "#/academic", i: "columns", t: "Academic English", s: "hedging, stance, síntesis", skill: "academicWriting" },
+  { h: "#/phd", i: "scroll", t: "PhD Mode", s: "supervisor, seminarios, viva", skill: "speaking" },
+  { h: "#/strategy", i: "target", t: "Exam Strategy", s: "distractores · sobreanálisis", skill: "strategy" },
+  { h: "#/reading?d=culture", i: "globe", t: "Cultura general", s: "ciencia, historia, arte…", skill: "reading" },
+  { h: "#/professor", i: "teacher", t: "Professor Mode", s: "pregunta lo que quieras", skill: "" },
+  { h: "#/dict", i: "search", t: "Diccionario", s: "76 000 entradas offline", skill: "" },
+  { h: "#/generate", i: "sparkle", t: "Generar contenido", s: "IA opcional (Gemini)", skill: "" },
 ];
 
 export function Learn() {
@@ -34,14 +37,14 @@ export function Learn() {
   return (
     <div>
       <Topbar title={tr("Aprender", "Learn")} />
-      <div className="grid2 md3">
+      <div className="grid2 md3 stagger">
         {MODULES.map((m) => {
           const skipped = m.skip && (settings.skip as any)[m.skip];
           const ab = m.skill ? model.skills[m.skill] : null;
           return (
             <button key={m.h} className={"tile" + (skipped ? " off" : "")} onClick={() => go(m.h)}>
               {ab && ab.n > 0 && <span className="lvl levelpill" style={{ fontSize: "0.75em" }}>{band(ab.theta).code}</span>}
-              <div className="ti">{m.i}</div><div className="tt">{m.t}</div><div className="ts">{skipped ? tr("omitida (toca para abrir)", "skipped") : m.s}</div>
+              <div className="ti"><Icon name={m.i} size={22} /></div><div className="tt">{m.t}</div><div className="ts">{skipped ? tr("omitida (toca para abrir)", "skipped") : m.s}</div>
             </button>
           );
         })}
@@ -50,7 +53,7 @@ export function Learn() {
   );
 }
 
-function statusIcon(st: string) { return st === "mastered" ? "👑" : st === "solid" ? "✓" : st === "weak" ? "⚠️" : st === "learning" ? "…" : "○"; }
+const STATUS_ES: Record<string, string> = { mastered: "dominado", solid: "sólido", weak: "débil", learning: "aprendiendo", new: "nuevo" };
 
 export function LessonsHub({ module }: { module: "grammar" | "academic" | "uoe" }) {
   const { tr, model } = useApp();
@@ -66,9 +69,9 @@ export function LessonsHub({ module }: { module: "grammar" | "academic" | "uoe" 
   return (
     <div>
       <Topbar title={title} back="#/learn" right={<span className="levelpill">{band(th).code}</span>} />
-      <div className="small muted" style={{ marginBottom: 6 }}>{tr("Todo está abierto: no hay bloqueos. Los temas marcados ⭐ están cerca de tu nivel actual.", "Everything is open. ⭐ = near your level.")}</div>
+      <div className="small muted" style={{ marginBottom: 6 }}>{tr("Todo está abierto: no hay bloqueos. Los temas con estrella están cerca de tu nivel actual.", "Everything is open. Starred = near your level.")}</div>
       {Object.entries(groups).map(([g, ls]) => (
-        <div key={g}>
+        <div key={g} className="stagger">
           <div className="section-title">{g}</div>
           {ls.map((l) => {
             const s = tagState(model, l.tag);
@@ -78,10 +81,10 @@ export function LessonsHub({ module }: { module: "grammar" | "academic" | "uoe" 
             const near = Math.abs(l.lvl - th) <= 6;
             return (
               <button key={l.id} className="unit" style={{ width: "100%", textAlign: "left" }} onClick={() => go(`#/lesson/${l.id}`)}>
-                <div className={"node " + (st === "mastered" || st === "solid" ? "done" : st === "new" ? "new" : "")}>{l.icon || "📘"}</div>
+                <div className={"node " + (st === "mastered" || st === "solid" ? "done" : st === "new" ? "new" : st === "weak" ? "warn" : "")}><Icon name={st === "mastered" ? "crown" : iconForTag(l.tag)} size={22} /></div>
                 <div className="grow">
-                  <div className="serif">{l.title} {near && st !== "mastered" ? "⭐" : ""}</div>
-                  <div className="tiny muted">{lvlLabel(l.lvl)} · {statusIcon(st)} {st}{acc !== null ? ` · ${acc}%` : ""}{pat === "recurrent" ? " · " + tr("error recurrente", "recurring error") : pat === "pressure" ? " · " + tr("falla bajo presión", "fails under pressure") : ""}</div>
+                  <div className="serif row" style={{ gap: 6 }}>{l.title} {near && st !== "mastered" ? <Icon name="star" size={14} className="gold" /> : null}</div>
+                  <div className="tiny muted">{lvlLabel(l.lvl)} · {STATUS_ES[st] || st}{acc !== null ? ` · ${acc}%` : ""}{pat === "recurrent" ? " · " + tr("error recurrente", "recurring error") : pat === "pressure" ? " · " + tr("falla bajo presión", "fails under pressure") : ""}</div>
                   {s.n > 0 && <div style={{ marginTop: 4 }}><Bar pct={acc ?? 0} thin kind={st === "mastered" ? "gold" : st === "weak" ? "" : "green"} /></div>}
                 </div>
               </button>
@@ -141,7 +144,7 @@ export function LessonPage({ id }: { id: string }) {
           </div>
           <div className="row">
             <button className="btn ghost grow" onClick={() => history.back()}>{tr("Volver", "Back")}</button>
-            <button className="btn primary grow" onClick={() => go(`#/practice/${encodeURIComponent(lesson.tag)}`)}>{tr("Más práctica", "More practice")}</button>
+            <button className="btn primary grow" onClick={() => go(`#/practice/${encodeURIComponent(lesson.tag)}`)}><Icon name="infinity" size={18} /> {tr("Más práctica", "More practice")}</button>
           </div>
         </div>
       )}
@@ -150,46 +153,73 @@ export function LessonPage({ id }: { id: string }) {
 }
 
 export function PracticeTag({ tag }: { tag: string }) {
-  const { tr, model } = useApp();
+  const { tr, model, settings } = useApp();
   const lesson = lessonForTag(tag);
-  const [queue, setQueue] = useState<Item[]>(() => {
-    const pool = itemsForTag(tag);
-    const sk = pool[0]?.skill || "grammar";
-    return pickItems(pool, Math.min(10, pool.length), model.skills[sk]?.theta ?? 58, new Set());
-  });
+  const bank = itemsForTag(tag);
+  const sk = bank[0]?.skill || "grammar";
+  const th = () => model.skills[sk]?.theta ?? 58;
+  const [queue, setQueue] = useState<Item[]>(() => pickItems(bank, Math.min(10, bank.length), th(), new Set()));
   const [i, setI] = useState(0);
-  const [score, setScore] = useState({ n: 0, c: 0 });
-  const [busy, setBusy] = useState(false);
+  const [score, setScore] = useState({ n: 0, c: 0, run: 0 });
+  const [round, setRound] = useState(1);
+  const [note, setNote] = useState<string | null>(null);
+  const wrong = React.useRef(new Set<string>());
+  const busy = React.useRef(false);
   const it = queue[i];
+
+  // nunca se acaba: banco sin ver → generados → IA (si hay clave) → repaso de lo visto (primero lo fallado)
   const more = async () => {
-    setBusy(true);
-    const pool = itemsForTag(tag).filter((x) => !queue.some((q) => q.id === x.id));
-    const sk = pool[0]?.skill || queue[0]?.skill || "grammar";
-    let got = pickItems(pool, 6, (model.skills[sk]?.theta ?? 58) + 4, new Set());
-    if (!got.length && aiReady()) {
+    if (busy.current) return;
+    busy.current = true;
+    const seenIds = new Set(queue.map((q) => q.id));
+    let got = pickItems(bank.filter((x) => !seenIds.has(x.id)), 6, th() + 3, new Set());
+    const gm = modeForTag(tag);
+    if (got.length < 4 && gm) got = [...got, ...(await generate(gm, 6 - got.length, Math.round(th()), { accents: settings.accents }))];
+    if (got.length < 4 && aiReady()) {
       try {
-        const r = await generateItems(tag, lesson?.title || tagName(tag), Math.round(model.skills[sk]?.theta ?? 60) + 4, 5, ["mcq", "gap", "judge", "spot", "kwt"]);
-        got = (r.items || []).map((x: any, k: number) => ({ ...x, id: `ai-${tag}-${Date.now()}-${k}`, tags: [tag], skill: skillOf(tag), lvl: Math.round(model.skills[sk]?.theta ?? 60) + 4 }));
-        await addCustomItems(got);
+        const r = await generateItems(tag, lesson?.title || tagName(tag), Math.round(th()) + 4, 5, ["mcq", "gap", "judge", "spot", "kwt"]);
+        const its = (r.items || []).map((x: any, k: number) => ({ ...x, id: `ai-${tag}-${Date.now()}-${k}`, tags: [tag], skill: skillOf(tag), lvl: Math.round(th()) + 4, explain: x.explain || "" }));
+        await addCustomItems(its);
+        got = [...got, ...its];
       } catch {}
     }
-    setQueue([...queue, ...got]);
-    setBusy(false);
+    if (got.length < 4) {
+      // nueva ronda: lo que fallaste primero, luego lo más antiguo; nunca el último visto
+      const recent = new Set(queue.slice(-4).map((q) => q.id));
+      const failed = bank.filter((x) => wrong.current.has(x.id) && !recent.has(x.id));
+      const rest = shuffle(bank.filter((x) => !wrong.current.has(x.id) && !recent.has(x.id)));
+      got = [...got, ...failed, ...rest].slice(0, 8);
+      if (got.length) { setRound((r) => r + 1); setNote(tr(`Ronda ${round + 1}: el banco de este tema tiene ${bank.length} ejercicios; repasamos primero lo que fallaste.`, `Round ${round + 1}: recycling, missed items first.`)); }
+    }
+    setQueue((q) => [...q, ...got]);
+    busy.current = false;
   };
+  React.useEffect(() => { if (queue.length - i <= 2) more(); }, [i]);
+
   return (
     <div>
-      <Topbar title={tagName(tag)} back right={<span className="tag">{score.c}/{score.n}</span>} />
-      {lesson && <div className="small" style={{ marginBottom: 8 }}><a href={`#/lesson/${lesson.id}`}>📘 {tr("Repasar la lección", "Review the lesson")}</a></div>}
+      <div className="sess-head">
+        <button className="iconbtn" onClick={() => history.back()} aria-label="Salir"><Icon name="x" /></button>
+        <div className="grow">
+          <div className="row between tiny muted" style={{ marginBottom: 4 }}><span className="row" style={{ gap: 6 }}><Icon name="infinity" size={14} /> {tagName(tag)}</span><span>{score.c}/{score.n}</span></div>
+          <Bar pct={((score.n % 10) / 10) * 100} kind="gold" />
+        </div>
+      </div>
+      <div className="sess-sub">
+        {lesson ? <a className="sess-reason" href={`#/lesson/${lesson.id}`}><Icon name="learn" size={14} /> {tr("Repasar la lección", "Review the lesson")}</a> : <span />}
+        {score.run >= 3 && <span className="combo-chip" key={score.run}><Icon name="flame" size={13} /> {score.run}</span>}
+      </div>
+      {note && <div className="card flat tight small muted fadein">{note}{!aiReady() && " " + tr("Con una clave gratuita de Gemini (Ajustes) también se generan ejercicios nuevos de gramática.", "")}</div>}
       {it ? (
-        <div className="card">
-          <ItemView key={it.id + i} item={it} mode="practice" onMore={() => more()} onDone={(r) => { setScore({ n: score.n + 1, c: score.c + (r.correct ? 1 : 0) }); setI(i + 1); }} />
+        <div className="card act-enter" key={it.id + i}>
+          <ItemView item={it} mode="practice" onMore={() => more()} onDone={(r) => {
+            if (!r.correct) wrong.current.add(it.id); else wrong.current.delete(it.id);
+            setScore((s) => ({ n: s.n + 1, c: s.c + (r.correct ? 1 : 0), run: r.correct ? s.run + 1 : 0 }));
+            setI(i + 1); window.scrollTo(0, 0);
+          }} />
         </div>
       ) : (
-        <div className="card center">
-          <p>{tr("Terminaste los ítems disponibles de este tema.", "No more items for this topic.")}</p>
-          <button className="btn primary" disabled={busy} onClick={more}>{busy ? "…" : aiReady() ? tr("Generar más con IA", "Generate more (AI)") : tr("Buscar más", "Find more")}</button>
-          {!aiReady() && <div className="tiny muted" style={{ marginTop: 6 }}>{tr("Con una clave gratuita de Gemini (Ajustes) puedes generar ejercicios ilimitados.", "Add a free Gemini key for unlimited items.")}</div>}
-        </div>
+        <div className="card center"><Owl mood="thinking" size={80} /><div className="muted small">{tr("Buscando más…", "Loading…")}</div></div>
       )}
     </div>
   );

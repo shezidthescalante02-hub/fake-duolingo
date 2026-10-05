@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Icon } from "../components/Icon";
 import { useApp, DEFAULT_SETTINGS } from "../state";
 import { Topbar, Toggle, Owl } from "../components/ui";
 import { DIFFS } from "../engine/difficulty";
@@ -59,7 +60,7 @@ export function SettingsPage() {
     <div>
       <Topbar title={tr("Ajustes", "Settings")} back />
 
-      <div className="section-title">👤 {tr("Perfil", "Profile")}</div>
+      <div className="section-title"><Icon name="user" size={16} /> {tr("Perfil", "Profile")}</div>
       <div className="card">
         <div className="setrow"><div className="grow"><div className="l">{tr("Nombre", "Name")}</div></div><input className="input" style={{ maxWidth: 200 }} value={s.name} onChange={(e) => setSettings({ name: e.target.value })} /></div>
         <div className="setrow"><div className="grow"><div className="l">{tr("Tema de investigación", "Research topic")}</div><div className="d">{tr("Personaliza tareas de writing/speaking", "Personalises tasks")}</div></div></div>
@@ -72,7 +73,7 @@ export function SettingsPage() {
         </div>
       </div>
 
-      <div className="section-title">😈 {tr("Dificultad y estudio", "Difficulty & study")}</div>
+      <div className="section-title"><Icon name="bolt" size={16} /> {tr("Dificultad y estudio", "Difficulty & study")}</div>
       <div className="card">
         {DIFFS.map((d) => (
           <label key={d.id} className="setrow" style={{ cursor: "pointer" }}>
@@ -89,7 +90,7 @@ export function SettingsPage() {
         <div className="setrow"><div className="grow"><div className="l">{tr("Mostrar racha", "Show streak")}</div><div className="d">{tr("Solo informativa: nunca pierdes progreso", "Informational only")}</div></div><Toggle on={s.showStreak} onChange={(v) => setSettings({ showStreak: v })} /></div>
       </div>
 
-      <div className="section-title">🦉 Strix</div>
+      <div className="section-title"><Icon name="owl" size={16} /> Strix</div>
       <div className="card">
         <div className="row"><Owl size={80} /><div className="small muted grow">{tr("Personaliza a tu villano. Los accesorios se desbloquean con nivel (tú vas en el", "Customise your villain (level")} {lv}).</div></div>
         <div className="setrow"><div className="grow"><div className="l">{tr("Sarcasmo", "Sarcasm")}</div></div>
@@ -97,14 +98,14 @@ export function SettingsPage() {
         </div>
         <div className="setrow"><div className="grow"><div className="l">{tr("Groserías ocasionales", "Occasional swearing")}</div><div className="d">damn, hell… {tr("(poco frecuentes)", "(rare)")}</div></div><Toggle on={s.spicy} onChange={(v) => setSettings({ spicy: v })} /></div>
         <div className="setrow"><div className="grow"><div className="l">{tr("Plumaje", "Plumage")}</div></div>
-          <div className="chips">{Object.keys(OWL_COLORS).map((c) => { const u = c === "crimson" || UNLOCKS.find((x) => x.id === "color:" + c && lv >= x.level); return <button key={c} disabled={!u} className={"chip " + (s.owlColor === c ? "on" : "")} onClick={() => setSettings({ owlColor: c })}><span style={{ width: 12, height: 12, borderRadius: 6, background: OWL_COLORS[c], display: "inline-block" }} />{u ? "" : "🔒"}</button>; })}</div>
+          <div className="chips">{Object.keys(OWL_COLORS).map((c) => { const u = c === "crimson" || UNLOCKS.find((x) => x.id === "color:" + c && lv >= x.level); return <button key={c} disabled={!u} className={"chip " + (s.owlColor === c ? "on" : "")} onClick={() => setSettings({ owlColor: c })}><span style={{ width: 12, height: 12, borderRadius: 6, background: OWL_COLORS[c], display: "inline-block" }} />{u ? null : <Icon name="lock" size={13} />}</button>; })}</div>
         </div>
         <div className="setrow"><div className="grow"><div className="l">{tr("Accesorio", "Accessory")}</div></div>
-          <div className="chips">{(["none", "mortarboard", "scarf", "crown"] as const).map((a) => { const u = a === "none" || UNLOCKS.find((x) => x.id === "acc:" + a && lv >= x.level); const req = UNLOCKS.find((x) => x.id === "acc:" + a)?.level; return <button key={a} disabled={!u} className={"chip " + (s.owlAccessory === a ? "on" : "")} onClick={() => setSettings({ owlAccessory: a })}>{a === "none" ? "—" : a === "mortarboard" ? "🎓" : a === "scarf" ? "🧣" : "👑"}{u ? "" : ` 🔒Lv${req}`}</button>; })}</div>
+          <div className="chips">{(["none", "mortarboard", "scarf", "crown"] as const).map((a) => { const u = a === "none" || UNLOCKS.find((x) => x.id === "acc:" + a && lv >= x.level); const req = UNLOCKS.find((x) => x.id === "acc:" + a)?.level; return <button key={a} disabled={!u} className={"chip " + (s.owlAccessory === a ? "on" : "")} onClick={() => setSettings({ owlAccessory: a })}>{a === "none" ? "—" : a === "mortarboard" ? "Birrete" : a === "scarf" ? "Bufanda" : "Corona"}{u ? null : <><Icon name="lock" size={13} /> Lv{req}</>}</button>; })}</div>
         </div>
       </div>
 
-      <div className="section-title">🔊 Audio</div>
+      <div className="section-title"><Icon name="speaker" size={16} /> Audio</div>
       <div className="card">
         {([["fx", tr("Efectos", "Effects")], ["music", tr("Música ambiental", "Ambient music")], ["voice", tr("Voces (listening)", "Voices")]] as [keyof typeof s.vol, string][]).map(([k, l]) => (
           <div key={k} className="setrow"><div className="grow"><div className="l">{l}</div><input type="range" min={0} max={1} step={0.05} value={s.vol[k]} onChange={(e) => setSettings({ vol: { ...s.vol, [k]: +e.target.value } })} /></div><span className="small muted" style={{ width: 40 }}>{Math.round(s.vol[k] * 100)}%</span></div>
@@ -116,7 +117,7 @@ export function SettingsPage() {
         <div className="tiny muted" style={{ marginTop: 6 }}>{tr("En Android, las voces dependen de “Servicios de voz de Google”: Ajustes del teléfono → Accesibilidad / Texto a voz → descargar inglés (EE. UU., Reino Unido, Australia, India) para usarlas sin internet.", "On Android, download English voices in system TTS settings.")}</div>
       </div>
 
-      <div className="section-title">🔔 {tr("Recordatorios", "Reminders")}</div>
+      <div className="section-title"><Icon name="bell" size={16} /> {tr("Recordatorios", "Reminders")}</div>
       <div className="card">
         <div className="setrow"><div className="grow"><div className="l">{tr("Activar recordatorios", "Enable reminders")}</div><div className="d">{notifSupported() ? tr("Puedes desactivarlos por completo cuando quieras", "Turn off anytime") : tr("Solo en la app de Android", "Android app only")}</div></div><Toggle on={s.notif.enabled} onChange={(v) => setSettings({ notif: { ...s.notif, enabled: v } })} /></div>
         {s.notif.enabled && (
@@ -127,7 +128,7 @@ export function SettingsPage() {
             {s.notif.times.map((t, i) => (
               <div key={i} className="row" style={{ marginTop: 4 }}>
                 <input type="time" className="input" style={{ maxWidth: 140 }} value={t} onChange={(e) => { const times = [...s.notif.times]; times[i] = e.target.value; setSettings({ notif: { ...s.notif, times } }); }} />
-                {s.notif.times.length > 1 && <button className="btn xs ghost" onClick={() => setSettings({ notif: { ...s.notif, times: s.notif.times.filter((_, j) => j !== i) } })}>✕</button>}
+                {s.notif.times.length > 1 && <button className="btn xs ghost" onClick={() => setSettings({ notif: { ...s.notif, times: s.notif.times.filter((_, j) => j !== i) } })}><Icon name="x" size={16} /></button>}
               </div>
             ))}
             {s.notif.times.length < 4 && <button className="btn xs" style={{ marginTop: 6 }} onClick={() => setSettings({ notif: { ...s.notif, times: [...s.notif.times, "12:00"] } })}>＋ {tr("horario", "time")}</button>}
@@ -140,7 +141,7 @@ export function SettingsPage() {
         {notifMsg && <div className="small" style={{ marginTop: 6 }}>{notifMsg}</div>}
       </div>
 
-      <div className="section-title">🤖 {tr("IA opcional (gratuita)", "Optional AI (free)")}</div>
+      <div className="section-title"><Icon name="sparkle" size={16} /> {tr("IA opcional (gratuita)", "Optional AI (free)")}</div>
       <div className="card">
         <p className="small">{tr("La app funciona completa sin IA. Si quieres corrección más profunda de writing/speaking, Professor Mode conversacional y ejercicios ilimitados, puedes usar una clave gratuita de Google Gemini:", "Free Gemini key (optional):")}</p>
         <ol className="small" style={{ paddingLeft: 18 }}>
@@ -162,13 +163,13 @@ export function SettingsPage() {
         {aiMsg && <div className="small" style={{ marginTop: 6 }}>{aiMsg}</div>}
       </div>
 
-      <div className="section-title">💾 {tr("Datos", "Data")}</div>
+      <div className="section-title"><Icon name="download" size={16} /> {tr("Datos", "Data")}</div>
       <div className="card">
         <p className="small muted">{tr("Todo se guarda en este dispositivo. Exporta un respaldo de vez en cuando (y para pasar tu progreso entre celular, laptop y tablet).", "Data is local. Export backups to move between devices.")}</p>
         <div className="row wrap">
           <button className="btn sm" onClick={exportData}>⬇️ {tr("Exportar respaldo", "Export")}</button>
           <label className="btn sm">⬆️ {tr("Importar respaldo", "Import")}<input type="file" accept="application/json" style={{ display: "none" }} onChange={(e) => e.target.files?.[0] && importData(e.target.files[0])} /></label>
-          <button className="btn sm danger" onClick={async () => { if (!confirmLike(tr("¿Borrar TODO tu progreso? No se puede deshacer.", "Delete everything?"))) return; for (const st of ["kv", "attempts", "vocab", "srs", "sessions", "sims", "writing", "speaking", "custom", "history"] as const) await db.clear(st); location.reload(); }}>🗑️ {tr("Reiniciar todo", "Reset")}</button>
+          <button className="btn sm danger" onClick={async () => { if (!confirmLike(tr("¿Borrar TODO tu progreso? No se puede deshacer.", "Delete everything?"))) return; for (const st of ["kv", "attempts", "vocab", "srs", "sessions", "sims", "writing", "speaking", "custom", "history"] as const) await db.clear(st); location.reload(); }}><Icon name="trash" size={16} /> {tr("Reiniciar todo", "Reset")}</button>
         </div>
         <button className="btn sm ghost" style={{ marginTop: 8 }} onClick={() => setSettings({ onboarded: false })}>{tr("Repetir bienvenida", "Replay onboarding")}</button>
         <button className="btn sm ghost" style={{ marginTop: 8, marginLeft: 6 }} onClick={() => (location.hash = "#/diagnostic")}>{tr("Repetir diagnóstico", "Retake diagnostic")}</button>

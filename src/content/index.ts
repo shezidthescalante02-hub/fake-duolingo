@@ -13,6 +13,7 @@ import { WRITING_TASKS } from "./writing";
 import { SPEAKING_TASKS } from "./speaking";
 import { PHD_SCENARIOS } from "./phd";
 import { VOCAB_SEED } from "./vocab";
+import { VARIETY_ITEMS } from "./variety";
 import { db } from "../db/db";
 
 export { WRITING_TASKS, SPEAKING_TASKS, PHD_SCENARIOS, VOCAB_SEED };
@@ -60,9 +61,18 @@ function rebuild() {
   for (const l of ALL_LESSONS) { lessonByTag.set(l.tag, l); for (const it of l.items) add(it); }
   for (const r of READINGS) for (const q of r.questions) add(q);
   for (const s of LISTENING_SETS) for (const q of s.questions) add(q);
+  for (const it of VARIETY_ITEMS) add(it);
   for (const it of customItems) add(it);
 }
 rebuild();
+
+// Ítems generados al vuelo (ejercicios infinitos): se registran para que el índice los conozca
+export function registerGenerated(items: Item[]) {
+  for (const it of items) {
+    if (itemIndex.has(it.id)) continue;
+    itemIndex.set(it.id, it);
+  }
+}
 
 export function findItem(id: string) { return itemIndex.get(id); }
 export function itemsForTag(tag: string): Item[] { return tagIndex.get(tag) || []; }
@@ -76,6 +86,7 @@ export function listeningSetOf(itemId: string) { return LISTENING_SETS.find((r) 
 export function standaloneItems(): Item[] {
   const out: Item[] = [];
   for (const l of ALL_LESSONS) for (const it of l.items) out.push(it);
+  for (const it of VARIETY_ITEMS) out.push(it);
   for (const it of customItems) out.push(it);
   return out;
 }
@@ -89,6 +100,6 @@ Object.assign(TAG_NAMES, {
   "rd:counter": "Counterarguments", "rd:ctest": "Complete the Words",
   "ls:gist": "Global comprehension", "ls:detail": "Details", "ls:inference": "Inference", "ls:purpose": "Speaker's purpose", "ls:attitude": "Attitude",
   "ls:organization": "Organisation", "ls:causal": "Causal relations", "ls:response": "Choose a response",
-  "uoe:kwt": "Key word transformations", "uoe:wordform": "Word formation", "avoc:core": "Academic vocabulary (core)",
+  "uoe:kwt": "Key word transformations", "avoc:linguistics": "Linguistics terminology", "voc:false-friends": "False friends", "ls:dictation": "Dictation", "voc:dict": "Vocabulary breadth", "voc:personal": "Your vocabulary", "uoe:wordform": "Word formation", "avoc:core": "Academic vocabulary (core)",
 });
 export function tagName(t: string) { return TAG_NAMES[t] || t; }

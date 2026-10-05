@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { Icon } from "../components/Icon";
 import { useApp } from "../state";
 import { Topbar, Bar, go, Stat } from "../components/ui";
 import { LineChart, Radar, Heat, Donut } from "../components/Charts";
@@ -53,7 +54,7 @@ export function Dashboard() {
 
   return (
     <div>
-      <Topbar title={tr("Progreso", "Progress")} right={<button className="iconbtn" onClick={() => go("#/settings")}>⚙️</button>} />
+      <Topbar title={tr("Progreso", "Progress")} right={<button className="iconbtn" onClick={() => go("#/settings")}><Icon name="gear" size={16} /></button>} />
       <div className="card hl">
         <div className="row between">
           <div><div className="tiny muted">Overall</div><div className="levelpill gold" style={{ fontSize: "1.6em" }}>{model.diagnosed ? band(ov).code : "?"}</div></div>
@@ -68,7 +69,7 @@ export function Dashboard() {
 
       <div className="card"><Radar data={core.map((k) => ({ label: SKILLS.find((s) => s.id === k)!.name.replace("General ", "").replace("Academic ", "Acad. "), value: model.skills[k].theta }))} /></div>
 
-      <div className="section-title">📈 {tr("Evolución", "History")}</div>
+      <div className="section-title"><Icon name="chart" size={16} /> {tr("Evolución", "History")}</div>
       <div className="card">
         <LineChart series={series} />
         <div className="chips scroll" style={{ marginTop: 6 }}>
@@ -76,7 +77,7 @@ export function Dashboard() {
         </div>
       </div>
 
-      <div className="section-title">🧭 {tr("Por habilidad", "By skill")}</div>
+      <div className="section-title"><Icon name="compass" size={16} /> {tr("Por habilidad", "By skill")}</div>
       <div className="card">
         {SKILLS.map((s) => {
           const a = model.skills[s.id];
@@ -84,22 +85,22 @@ export function Dashboard() {
             <div key={s.id} style={{ margin: "9px 0" }}>
               <div className="row between small">
                 <span>{s.name}</span>
-                <span>{a.n < 1 ? <span className="muted">—</span> : <b className="serif">{rangeLabel(a.theta, a.n < 5 ? sdOf(a) / 2 : 0)}</b>}{a.tN >= 3 && a.uN >= 3 && a.uTheta - a.tTheta > 5 ? <span className="tiny gold"> ⏱−{Math.round(a.uTheta - a.tTheta)}</span> : null}</span>
+                <span>{a.n < 1 ? <span className="muted">—</span> : <b className="serif">{rangeLabel(a.theta, a.n < 5 ? sdOf(a) / 2 : 0)}</b>}{a.tN >= 3 && a.uN >= 3 && a.uTheta - a.tTheta > 5 ? <span className="tiny gold"> <Icon name="clock" size={16} />−{Math.round(a.uTheta - a.tTheta)}</span> : null}</span>
               </div>
               <Bar pct={a.n < 1 ? 0 : ((a.theta - 30) / 65) * 100} thin kind={a.theta >= 72 ? "gold" : ""} />
             </div>
           );
         })}
-        <div className="tiny muted">{tr("⏱−N: puntos que pierdes con reloj en esa habilidad.", "⏱−N: points lost under time pressure.")}</div>
+        <div className="tiny muted"><Icon name="clock" size={12} /> {tr("−N: puntos que pierdes con reloj en esa habilidad.", "−N: points lost under time pressure.")}</div>
       </div>
 
       <div className="grid2">
         <div className="card center"><Donut pct={recentAcc * 100} /><div className="small muted">{tr("aciertos recientes (60)", "recent accuracy")}</div></div>
         <div className="card center"><Donut pct={ot.total ? (1 - (ot.rate || 0)) * 100 : 100} color="var(--gold)" /><div className="small muted">{tr("cambios no dañinos", "non-harmful changes")}</div></div>
       </div>
-      {pg !== null && <div className="card tight small">⏱️ {tr("Brecha de presión media", "Avg. pressure gap")}: <b>{pg.toFixed(1)}</b> {tr("puntos", "points")}</div>}
+      {pg !== null && <div className="card tight small"><Icon name="clock" size={16} /> {tr("Brecha de presión media", "Avg. pressure gap")}: <b>{pg.toFixed(1)}</b> {tr("puntos", "points")}</div>}
 
-      <div className="section-title">🗂️ {tr("Vocabulario", "Vocabulary")}</div>
+      <div className="section-title"><Icon name="cards" size={16} /> {tr("Vocabulario", "Vocabulary")}</div>
       <div className="card">
         <div className="grid3">
           <Stat v={vocab.filter((v) => !v.archived).length} l={tr("aprendiendo", "learning")} />
@@ -108,12 +109,12 @@ export function Dashboard() {
         </div>
         <div style={{ marginTop: 10 }}>
           {VSTATES.map((s) => <div key={s.id} className="row between small" style={{ margin: "3px 0" }}><span>{s.name} <span className="tiny muted">{s.desc}</span></span><b>{vCounts[s.id] || 0}</b></div>)}
-          <div className="row between small"><span>🗄️ {tr("Retiradas", "Retired")}</span><b>{vocab.filter((v) => v.archived).length}</b></div>
-          {shouldKnow > 0 && <div className="row between small gold"><span>⭐ Words I should probably know</span><b>{shouldKnow}</b></div>}
+          <div className="row between small"><span><Icon name="archive" size={16} /> {tr("Retiradas", "Retired")}</span><b>{vocab.filter((v) => v.archived).length}</b></div>
+          {shouldKnow > 0 && <div className="row between small gold"><span><Icon name="star" size={16} /> Words I should probably know</span><b>{shouldKnow}</b></div>}
         </div>
       </div>
 
-      <div className="section-title">🧩 {tr("Gramática y académico por categoría", "Grammar by category")}</div>
+      <div className="section-title"><Icon name="puzzle" size={16} /> {tr("Gramática y académico por categoría", "Grammar by category")}</div>
       <div className="card">
         {[...GRAMMAR_LESSONS, ...UOE_LESSONS, ...ACADEMIC_LESSONS].map((l) => {
           const s = model.tags[l.tag];
@@ -130,7 +131,7 @@ export function Dashboard() {
         {Object.keys(model.tags).length === 0 && <div className="small muted">{tr("Aún sin datos.", "No data yet.")}</div>}
       </div>
 
-      <div className="section-title">⚠️ {tr("Errores frecuentes", "Frequent errors")}</div>
+      <div className="section-title"><Icon name="alert" size={16} /> {tr("Errores frecuentes", "Frequent errors")}</div>
       <div className="card">
         {errTags.length === 0 ? <div className="small muted">{tr("Nada recurrente todavía.", "Nothing recurring yet.")}</div> : errTags.map(([t, v]) => (
           <div key={t} className="row between small" style={{ margin: "5px 0" }}>
@@ -141,10 +142,10 @@ export function Dashboard() {
 
       <div className="grid2">
         <div className="card"><h3 className="ok">✓ {tr("Dominados", "Mastered")}</h3>{mastered.length ? mastered.slice(0, 10).map(([t]) => <div key={t} className="small">{tagName(t)}</div>) : <div className="small muted">—</div>}</div>
-        <div className="card"><h3 className="bad">✎ {tr("Débiles", "Weak")}</h3>{weak.length ? weak.slice(0, 10).map(([t]) => <div key={t} className="small"><a href={`#/practice/${encodeURIComponent(t)}`}>{tagName(t)}</a></div>) : <div className="small muted">—</div>}</div>
+        <div className="card"><h3 className="bad"><Icon name="edit" size={16} /> {tr("Débiles", "Weak")}</h3>{weak.length ? weak.slice(0, 10).map(([t]) => <div key={t} className="small"><a href={`#/practice/${encodeURIComponent(t)}`}>{tagName(t)}</a></div>) : <div className="small muted">—</div>}</div>
       </div>
 
-      <div className="section-title">🎓 {tr("Simulaciones", "Simulations")}</div>
+      <div className="section-title">{tr("Simulaciones", "Simulations")}</div>
       <div className="card">
         {sims.length === 0 ? <div className="small muted">{tr("Aún no has hecho simulaciones.", "No simulations yet.")}</div> : (
           <>
@@ -156,13 +157,13 @@ export function Dashboard() {
         )}
       </div>
 
-      <div className="section-title">📅 {tr("Constancia (sin presión)", "Consistency")}</div>
+      <div className="section-title"><Icon name="calendar" size={16} /> {tr("Constancia (sin presión)", "Consistency")}</div>
       <div className="card">
         <Heat days={profile.days} />
         <div className="row small muted" style={{ marginTop: 8, gap: 14 }}><span>{cons.total} {tr("días en total", "days total")}</span><span>{cons.last30}/30 {tr("este mes", "this month")}</span><span>{profile.counters.minutes || 0} min</span><span>{profile.items} {tr("ejercicios", "items")}</span></div>
       </div>
 
-      <div className="section-title">🏆 {tr("Logros", "Achievements")} · Lv {lv.level} “{titleFor(lv.level)}”</div>
+      <div className="section-title"><Icon name="trophy" size={16} /> {tr("Logros", "Achievements")} · Lv {lv.level} “{titleFor(lv.level)}”</div>
       <div className="grid3">
         {ACHIEVEMENTS.map((a) => (
           <div key={a.id} className="stat center" style={{ opacity: profile.achievements[a.id] ? 1 : 0.35 }} title={a.desc}>

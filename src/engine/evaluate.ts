@@ -61,6 +61,34 @@ export function evaluate(item: Item, resp: any): EvalResult {
       const n = res.filter(Boolean).length;
       return { correct: n / gaps.length >= 0.8, score: n / gaps.length, detail: res };
     }
+    case "match": {
+      const errs = resp?.errors ?? 0;
+      const n = item.pairs.length;
+      return { correct: !!resp?.done && errs <= 1, score: resp?.done ? Math.max(0, 1 - errs / n) : 0, note: errs ? `${errs} ${errs === 1 ? "intento fallido" : "intentos fallidos"} antes de completar.` : undefined };
+    }
+    case "sort": {
+      const res = item.entries.map(([, c], i) => resp?.[i] === c);
+      const n = res.filter(Boolean).length;
+      return { correct: n === res.length, score: n / res.length, detail: res };
+    }
+    case "odd": return { correct: resp === item.answer, score: resp === item.answer ? 1 : 0 };
+    case "fix": {
+      const found = !!resp?.found;
+      const ok = found && item.answers.some((a) => norm(a) === norm(resp?.text || ""));
+      const close = found && !ok && item.answers.some((a) => lev(norm(a), norm(resp?.text || "")) <= 1);
+      return { correct: ok, score: (found ? 0.5 : 0) + (ok ? 0.5 : 0), note: !found ? "El error estaba en otra parte." : close ? "Muy cerca: revisa la ortografía." : undefined };
+    }
+    case "dictation": {
+      const d = dictationDiff(item.text, resp || "");
+      return { correct: d.acc >= 0.95, score: Math.round(d.acc * 100) / 100, detail: d };
+    }
+    case "stress": return { correct: resp === item.answer, score: resp === item.answer ? 1 : 0 };
+    case "recall": {
+      const r = norm(resp);
+      const ok = item.answers.some((a) => norm(a) === r);
+      const close = !ok && item.answers.some((a) => lev(norm(a), r) <= 1 && r.length > 3);
+      return { correct: ok, score: ok ? 1 : 0, note: close ? "Muy cerca: revisa la ortografía." : undefined };
+    }
     case "produce": {
       const s = typeof resp?.score === "number" ? resp.score : 0.6;
       return { correct: s >= 0.6, score: s };
@@ -85,4 +113,29 @@ function evalKwt(item: KWTItem, resp: string): EvalResult {
   }
   // una respuesta aceptada explícitamente siempre es correcta (p. ej. "cannot" para CAN'T)
   return { correct: ok, score: ok ? 1 : 0, note: ok ? undefined : note };
+}
+
+
+// ---------------------------------------------------------------- dictado: alineación palabra a palabra
+export function dictTokens(s: string): string[] {
+  return (s || "").toLowerCase().replace(/[’‘]/g, "'").replace(/[^a-z0-9'\s-]/g, " ").replace(/-/g, " ").split(/\s+/).filter(Boolean);
+}
+export interface DictDiff { acc: number; ops: { t: string; got?: string; st: "ok" | "sub" | "miss" | "extra" }[] }
+export function dictationDiff(target: string, got: string): DictDiff {
+  const a = dictTokens(target), b = dictTokens(got);
+  const m = a.length, n = b.length;
+  const d: number[][] = Array.from({ length: m + 1 }, (_, i) => Array.from({ length: n + 1 }, (_, j) => (i === 0 ? j : j === 0 ? i : 0)));
+  const same = (x: string, y: string) => x === y || (x.length > 5 && lev(x, y) <= 1);
+  for (let i = 1; i <= m; i++) for (let j = 1; j <= n; j++)
+    d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (same(a[i - 1], b[j - 1]) ? 0 : 1));
+  const ops: DictDiff["ops"] = [];
+  let i = m, j = n;
+  while (i > 0 || j > 0) {
+    if (i > 0 && j > 0 && d[i][j] === d[i - 1][j - 1] + (same(a[i - 1], b[j - 1]) ? 0 : 1)) {
+      ops.unshift({ t: a[i - 1], got: b[j - 1], st: same(a[i - 1], b[j - 1]) ? "ok" : "sub" }); i--; j--;
+    } else if (i > 0 && d[i][j] === d[i - 1][j] + 1) { ops.unshift({ t: a[i - 1], st: "miss" }); i--; }
+    else { ops.unshift({ t: b[j - 1], st: "extra" }); j--; }
+  }
+  const acc = m ? Math.max(0, 1 - d[m][n] / m) : 0;
+  return { acc, ops };
 }

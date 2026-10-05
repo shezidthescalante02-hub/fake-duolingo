@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Icon } from "./Icon";
 import type { SpeakingTask } from "../content/types";
 import { Md, Timer, useCountdown, OwlSays, fmtTime } from "./ui";
 import { useApp } from "../state";
@@ -165,7 +166,7 @@ export function SpeakingRunner({ task, mode = "practice", onDone, exam }: { task
         {task.context && <div className="ex-context"><Md text={task.context} /></div>}
         {repeat && stage === "ready" ? <div className="small">{tr("Escucharás una oración. Repítela exactamente.", "You'll hear a sentence. Repeat it exactly.")}</div> : !repeat && <Md text={task.prompt} />}
         {practice && task.phrases && stage !== "speak" && (
-          <details style={{ marginTop: 8 }}><summary className="small">💬 {tr("Expresiones útiles", "Useful phrases")}</summary><div className="chips" style={{ marginTop: 6 }}>{task.phrases.map((p) => <span key={p} className="tag">{p}</span>)}</div></details>
+          <details style={{ marginTop: 8 }}><summary className="small"><Icon name="text" size={16} /> {tr("Expresiones útiles", "Useful phrases")}</summary><div className="chips" style={{ marginTop: 6 }}>{task.phrases.map((p) => <span key={p} className="tag">{p}</span>)}</div></details>
         )}
       </div>
 
@@ -173,23 +174,23 @@ export function SpeakingRunner({ task, mode = "practice", onDone, exam }: { task
         <div className="card">
           <div className="small muted" style={{ marginBottom: 8 }}>{tr("Método de captura", "Capture method")}</div>
           <div className="chips">
-            {asrAvailable() && <button className={"chip " + (engine === "asr" ? "on" : "")} onClick={() => setEngine("asr")}>📝 {tr("Transcripción en vivo", "Live transcript")}</button>}
-            {recorderAvailable() && <button className={"chip " + (engine === "rec" ? "on" : "")} onClick={() => setEngine("rec")}>🎙️ {tr("Grabar audio (pausas + IA)", "Record audio")}</button>}
-            {!isNative() && asrAvailable() && recorderAvailable() && <button className={"chip " + (engine === "both" ? "on" : "")} onClick={() => setEngine("both")}>✨ {tr("Ambos", "Both")}</button>}
+            {asrAvailable() && <button className={"chip " + (engine === "asr" ? "on" : "")} onClick={() => setEngine("asr")}><Icon name="text" size={16} /> {tr("Transcripción en vivo", "Live transcript")}</button>}
+            {recorderAvailable() && <button className={"chip " + (engine === "rec" ? "on" : "")} onClick={() => setEngine("rec")}><Icon name="mic" size={16} /> {tr("Grabar audio (pausas + IA)", "Record audio")}</button>}
+            {!isNative() && asrAvailable() && recorderAvailable() && <button className={"chip " + (engine === "both" ? "on" : "")} onClick={() => setEngine("both")}><Icon name="sparkle" size={16} /> {tr("Ambos", "Both")}</button>}
           </div>
           <div className="tiny muted" style={{ marginTop: 6 }}>
             {tr("La transcripción usa el reconocedor de voz del sistema: no evalúa tu acento, solo si se te entiende. La grabación mide pausas y fluidez sin internet; la IA (opcional) puede escuchar el audio.", "ASR measures intelligibility, not accent.")}
           </div>
           {err && <div className="small bad" style={{ marginTop: 6 }}>{err}</div>}
           <div className="row" style={{ marginTop: 12 }}>
-            <button className="btn primary grow" onClick={start}>🎙️ {tr("Empezar", "Start")}</button>
+            <button className="btn primary grow" onClick={start}><Icon name="mic" size={16} /> {tr("Empezar", "Start")}</button>
             {practice && !repeat && <button className="btn ghost" onClick={() => setStage("typed")}>⌨️ {tr("Sin micrófono", "No mic")}</button>}
           </div>
           {!practice && <button className="btn ghost block" style={{ marginTop: 8 }} onClick={() => onDone({ score: -1, transcript: "" })}>{tr("Omitir esta tarea (no puedo hablar ahora)", "Skip this task")}</button>}
         </div>
       )}
 
-      {stage === "listen" && <div className="card center">🔊 {tr("Escucha…", "Listen…")}</div>}
+      {stage === "listen" && <div className="card center"><Icon name="speaker" size={16} /> {tr("Escucha…", "Listen…")}</div>}
 
       {stage === "prep" && (
         <div className="card center">
@@ -221,7 +222,7 @@ export function SpeakingRunner({ task, mode = "practice", onDone, exam }: { task
       {stage === "analyse" && metrics && (
         <>
           <div className="card">
-            <h3>📈 {tr("Métricas objetivas", "Objective metrics")}</h3>
+            <h3><Icon name="chart" size={16} /> {tr("Métricas objetivas", "Objective metrics")}</h3>
             {repeat && align ? (
               <>
                 <div className="serif" style={{ lineHeight: 1.9 }}>{align.words.map((w, i) => <span key={i} className={w.ok ? "ok" : "bad"} style={{ marginRight: 5, textDecoration: w.ok ? undefined : "underline" }}>{w.w}</span>)}</div>
@@ -250,7 +251,7 @@ export function SpeakingRunner({ task, mode = "practice", onDone, exam }: { task
           </div>
           {!repeat && (
             <div className="card">
-              <h3>✅ {tr("Autoevaluación", "Self-check")}</h3>
+              <h3><Icon name="check" size={16} /> {tr("Autoevaluación", "Self-check")}</h3>
               {task.checklist.map((c, i) => (
                 <label key={i} className="row" style={{ padding: "5px 0" }}>
                   <input type="checkbox" checked={checks.includes(i)} onChange={(e) => setChecks(e.target.checked ? [...checks, i] : checks.filter((x) => x !== i))} />
@@ -262,7 +263,7 @@ export function SpeakingRunner({ task, mode = "practice", onDone, exam }: { task
           )}
           {!repeat && (
             <div className="card">
-              <h3>🤖 {tr("Feedback con IA (opcional)", "AI feedback")}</h3>
+              <h3><Icon name="sparkle" size={16} /> {tr("Feedback con IA (opcional)", "AI feedback")}</h3>
               {!ai && <div className="small muted">{aiReady() ? (blob ? tr("La IA escuchará tu grabación.", "AI will listen to your recording.") : tr("La IA analizará la transcripción.", "AI will analyse the transcript.")) : tr("Sin clave de IA o sin conexión.", "No AI / offline.")}</div>}
               {!ai && aiReady() && <button className="btn sm" style={{ marginTop: 8 }} disabled={aiBusy || (!transcript && !blob)} onClick={runAi}>{aiBusy ? "…" : tr("Analizar con IA", "Analyse with AI")}</button>}
               {err && <div className="small bad">{err}</div>}

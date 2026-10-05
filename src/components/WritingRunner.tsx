@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { Icon } from "./Icon";
 import type { WritingTask } from "../content/types";
 import { Md, Timer, useCountdown, OwlSays, Bar } from "./ui";
 import { useApp } from "../state";
@@ -118,9 +119,9 @@ export function WritingRunner({ task, mode = "practice", onDone, exam }: { task:
         <div style={{ marginTop: 8 }}><Md text={task.prompt} /></div>
         {task.sources && task.sources.map((s, i) => <div key={i} className="ex-context"><Md text={s} /></div>)}
         <div className="row wrap small muted" style={{ gap: 10 }}>
-          <span>📏 {minWords}{task.maxWords ? "–" + task.maxWords : "+"} {tr("palabras", "words")}</span>
-          {task.timeMin && <span>⏱ {task.timeMin} min</span>}
-          {lock.dictionary && <span className="lock">🔒 {tr("sin diccionario", "no dictionary")}</span>}
+          <span><Icon name="text" size={16} /> {minWords}{task.maxWords ? "–" + task.maxWords : "+"} {tr("palabras", "words")}</span>
+          {task.timeMin && <span><Icon name="clock" size={16} /> {task.timeMin} min</span>}
+          {lock.dictionary && <span className="lock"><Icon name="lock" size={16} /> {tr("sin diccionario", "no dictionary")}</span>}
         </div>
         {mustWords.length > 0 && (
           <div style={{ marginTop: 8 }}>
@@ -137,7 +138,7 @@ export function WritingRunner({ task, mode = "practice", onDone, exam }: { task:
             <label className="row small" style={{ margin: "6px 2px" }}><input type="checkbox" checked={timed} onChange={(e) => setTimed(e.target.checked)} /> {tr(`Con el tiempo del examen (${task.timeMin} min)`, "Timed")}</label>
           )}
           {practice && task.phrases && !lock.dictionary && (
-            <details className="card flat tight"><summary className="small">💬 {tr("Banco de expresiones útiles", "Useful phrases")}</summary><div className="chips" style={{ marginTop: 8 }}>{task.phrases.map((p) => <span key={p} className="tag">{p}</span>)}</div></details>
+            <details className="card flat tight"><summary className="small"><Icon name="text" size={16} /> {tr("Banco de expresiones útiles", "Useful phrases")}</summary><div className="chips" style={{ marginTop: 8 }}>{task.phrases.map((p) => <span key={p} className="tag">{p}</span>)}</div></details>
           )}
           <textarea className="textarea" style={{ minHeight: 260 }} value={text} placeholder={tr("Escribe aquí, sin traductor. Un borrador puede ser imperfecto.", "Write here…")}
             onChange={(e) => { setText(e.target.value); if (!started) setStarted(true); }} spellCheck={false} autoCorrect="off" autoCapitalize="sentences" />
@@ -150,7 +151,7 @@ export function WritingRunner({ task, mode = "practice", onDone, exam }: { task:
         <>
           {owl && <OwlSays text={owl.t} gloss={owl.gloss} mood={owl.mood} />}
           <div className="card">
-            <h3>🔎 {tr("Paso 1 — Qué problemas tiene tu versión", "Step 1 — What's wrong")}</h3>
+            <h3><Icon name="search" size={16} /> {tr("Paso 1 — Qué problemas tiene tu versión", "Step 1 — What's wrong")}</h3>
             <div className="small muted">{tr("Primero el diagnóstico. Las alternativas se muestran después de que lo intentes otra vez.", "Diagnosis first; alternatives after a retry.")}</div>
             <Stats s={analysis.stats} rare={analysis.rare} />
             {analysis.est.notes.map((n, i) => <div key={i} className="small" style={{ margin: "4px 0" }}>• {n}</div>)}
@@ -160,13 +161,13 @@ export function WritingRunner({ task, mode = "practice", onDone, exam }: { task:
                 <div className="small"><span className={"tag " + (is.soft ? "gold" : "red")}>{catLabel(is.cat)}</span> <b className="serif">“{is.match}”</b></div>
                 <div style={{ marginTop: 4 }}><Md text={is.msg} inline />{is.soft ? <span className="tiny muted"> · {tr("revisa (no siempre es error)", "check (not always wrong)")}</span> : null}</div>
                 <div className="small muted" style={{ marginTop: 2 }}><Md text={is.why} inline /></div>
-                <div className="small gold" style={{ marginTop: 2 }}>💡 {is.hint}</div>
+                <div className="small gold" style={{ marginTop: 2 }}><Icon name="bulb" size={16} /> {is.hint}</div>
               </div>
             ))}
           </div>
 
           <div className="card">
-            <h3>🤖 {tr("Análisis profundo con IA (opcional)", "AI analysis (optional)")}</h3>
+            <h3><Icon name="sparkle" size={16} /> {tr("Análisis profundo con IA (opcional)", "AI analysis (optional)")}</h3>
             {!ai && <div className="small muted">{aiReady() ? tr("Gemini revisará argumentación, cohesión, registro y precisión — y también solo diagnosticará primero.", "Gemini will diagnose first.") : tr("Sin clave de IA o sin conexión: el análisis anterior es offline. Puedes añadir una clave gratuita de Gemini en Ajustes.", "No AI configured/offline.")}</div>}
             {!ai && aiReady() && <button className="btn sm" style={{ marginTop: 8 }} disabled={aiBusy} onClick={() => runAi(text)}>{aiBusy ? "…" : tr("Analizar con IA", "Analyse with AI")}</button>}
             {aiErr && <div className="small bad">{aiErr}</div>}
@@ -174,7 +175,7 @@ export function WritingRunner({ task, mode = "practice", onDone, exam }: { task:
           </div>
 
           <div className="card">
-            <h3>✅ {tr("Autoevaluación", "Self-check")}</h3>
+            <h3><Icon name="check" size={16} /> {tr("Autoevaluación", "Self-check")}</h3>
             {task.checklist.map((c, i) => (
               <label key={i} className="row" style={{ padding: "5px 0" }}>
                 <input type="checkbox" checked={checks.includes(i)} onChange={(e) => setChecks(e.target.checked ? [...checks, i] : checks.filter((x) => x !== i))} />
@@ -187,13 +188,13 @@ export function WritingRunner({ task, mode = "practice", onDone, exam }: { task:
             <div className="sticky-actions">
               <div className="row">
                 <button className="btn ghost" onClick={async () => { setPrevIssues(analysis.issues); setStage("reveal"); }}>{tr("Ver alternativas ya", "Show alternatives")}</button>
-                <button className="btn primary grow" onClick={() => { setPrevIssues(analysis.issues); setStage("rewrite"); }}>✍️ {tr("Paso 2: reescribir", "Step 2: rewrite")}</button>
+                <button className="btn primary grow" onClick={() => { setPrevIssues(analysis.issues); setStage("rewrite"); }}><Icon name="quill" size={16} /> {tr("Paso 2: reescribir", "Step 2: rewrite")}</button>
               </div>
             </div>
           )}
           {stage === "rewrite" && (
             <div className="card">
-              <h3>✍️ {tr("Paso 2 — Tu nueva versión", "Step 2 — Your revision")}</h3>
+              <h3><Icon name="quill" size={16} /> {tr("Paso 2 — Tu nueva versión", "Step 2 — Your revision")}</h3>
               <textarea className="textarea" style={{ minHeight: 240 }} value={text} onChange={(e) => setText(e.target.value)} spellCheck={false} />
               <div className="small muted">{wc} {tr("palabras", "words")}</div>
               <div className="sticky-actions">
@@ -207,7 +208,7 @@ export function WritingRunner({ task, mode = "practice", onDone, exam }: { task:
       {stage === "reveal" && analysis && (
         <>
           <div className="card hl">
-            <h3>📊 {tr("Paso 3 — Resultado y alternativas", "Step 3 — Result and alternatives")}</h3>
+            <h3><Icon name="chart" size={16} /> {tr("Paso 3 — Resultado y alternativas", "Step 3 — Result and alternatives")}</h3>
             <div className="row" style={{ gap: 12 }}>
               <div className="levelpill gold" style={{ fontSize: "1.3em" }}>{band(ai?.band ? bandToScore(ai.band) ?? finalScore : finalScore).code}</div>
               <div className="small muted grow">{ai?.band ? tr("Estimación de la IA: ", "AI estimate: ") + ai.band : tr("Estimación automática + autoevaluación (confianza baja; se afina con más textos).", "Automatic estimate (low confidence).")}</div>
@@ -231,7 +232,7 @@ export function WritingRunner({ task, mode = "practice", onDone, exam }: { task:
           )}
           {ai && <div className="card"><AiDiag ai={ai} reveal /></div>}
           {task.model && (
-            <details className="card"><summary>📜 {tr("Respuesta modelo (una de muchas posibles)", "Model answer")}</summary><div className="serif" style={{ marginTop: 8 }}><Md text={task.model} /></div></details>
+            <details className="card"><summary><Icon name="scroll" size={16} /> {tr("Respuesta modelo (una de muchas posibles)", "Model answer")}</summary><div className="serif" style={{ marginTop: 8 }}><Md text={task.model} /></div></details>
           )}
           <div className="sticky-actions"><button className="btn primary block" onClick={() => finalize(text, ai?.band ? (bandToScore(ai.band) ?? finalScore) : finalScore, analysis.issues.length)}>{tr("Guardar y continuar", "Save and continue")}</button></div>
         </>
@@ -269,7 +270,7 @@ function AiDiag({ ai, reveal }: { ai: any; reveal: boolean }) {
           <div className="small"><span className="tag gold">{p.type}</span> <b className="serif">“{p.quote}”</b></div>
           <div className="small" style={{ marginTop: 4 }}>{p.problem}</div>
           <div className="small muted">{p.why}</div>
-          {!reveal && <div className="small gold">💡 {p.hint}</div>}
+          {!reveal && <div className="small gold"><Icon name="bulb" size={16} /> {p.hint}</div>}
           {reveal && p.options?.length > 0 && <div className="small ok" style={{ marginTop: 4 }}>→ {p.options.join(" · ")}</div>}
         </div>
       ))}

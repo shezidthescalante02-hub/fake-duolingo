@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Icon } from "../components/Icon";
 import { useApp } from "../state";
 import { Topbar, Empty } from "../components/ui";
 import { searchPrefix, lookup } from "../services/dictionary";
@@ -19,7 +20,7 @@ export function DictionaryPage({ initial }: { initial: string }) {
   return (
     <div>
       <Topbar title={tr("Diccionario", "Dictionary")} back />
-      {lock.dictionary ? <Empty>🔒 {tr("Bloqueado durante esta actividad.", "Locked.")}</Empty> : (
+      {lock.dictionary ? <Empty><Icon name="lock" size={16} /> {tr("Bloqueado durante esta actividad.", "Locked.")}</Empty> : (
         <>
           <input className="input" autoFocus placeholder={tr("Busca una palabra en inglés…", "Search an English word…")} value={q} onChange={(e) => setQ(e.target.value)} autoCapitalize="off" autoCorrect="off" />
           <div className="tiny muted" style={{ margin: "6px 2px" }}>{tr("76 000+ entradas offline (Open English WordNet) con IPA, frecuencia, sinónimos, familia léxica y equivalentes en español.", "Offline dictionary.")}</div>

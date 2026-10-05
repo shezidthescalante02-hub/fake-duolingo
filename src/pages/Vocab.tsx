@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { Icon } from "../components/Icon";
 import { useApp } from "../state";
 import { Topbar, go, Empty, Md, OwlSays } from "../components/ui";
 import { db } from "../db/db";
@@ -10,7 +11,7 @@ import { speak } from "../services/tts";
 import { freqLabel } from "../services/dictionary";
 
 const CATS: { id: string; name: string; test: (v: VocabEntry) => boolean }[] = [
-  { id: "should", name: "⭐ Words I should probably know", test: () => false },
+  { id: "should", name: "Words I should probably know", test: () => false },
   { id: "academic", name: "Academic English", test: (v) => v.tags.includes("academic") },
   { id: "toefl", name: "TOEFL", test: (v) => v.tags.includes("toefl") },
   { id: "cambridge", name: "Cambridge", test: (v) => v.tags.includes("cae") || v.tags.includes("cpe") || v.tags.includes("cambridge") },
@@ -75,16 +76,16 @@ export function VocabPage() {
 
   return (
     <div>
-      <Topbar title={tr("Mi vocabulario", "My vocabulary")} right={<button className="iconbtn" onClick={() => go("#/dict")}>🔎</button>} />
+      <Topbar title={tr("Mi vocabulario", "My vocabulary")} right={<button className="iconbtn" onClick={() => go("#/dict")}><Icon name="search" size={16} /></button>} />
       <div className="grid3" style={{ marginBottom: 8 }}>
         <div className="stat"><div className="v">{all.filter((v) => !v.archived).length}</div><div className="l">{tr("activas", "active")}</div></div>
         <div className="stat"><div className="v">{(counts.active || 0) + (counts.mastered || 0)}</div><div className="l">{tr("uso activo", "active use")}</div></div>
         <div className="stat"><div className="v">{due}</div><div className="l">{tr("para repasar", "due")}</div></div>
       </div>
-      {due > 0 && <button className="btn primary block" onClick={() => go("#/vocab/review")}>🔁 {tr("Repasar ahora", "Review now")} ({due})</button>}
+      {due > 0 && <button className="btn primary block" onClick={() => go("#/vocab/review")}><Icon name="repeat" size={16} /> {tr("Repasar ahora", "Review now")} ({due})</button>}
       <div className="chips" style={{ margin: "12px 0 6px" }}>
         <button className={"chip " + (tab === "mine" ? "on" : "")} onClick={() => setTab("mine")}>{tr("Mis palabras", "My words")}</button>
-        <button className={"chip " + (tab === "library" ? "on" : "")} onClick={() => setTab("library")}>📚 {tr("Biblioteca curada", "Curated library")} ({VOCAB_SEED.length})</button>
+        <button className={"chip " + (tab === "library" ? "on" : "")} onClick={() => setTab("library")}><Icon name="cards" size={16} /> {tr("Biblioteca curada", "Curated library")} ({VOCAB_SEED.length})</button>
       </div>
       <input className="input" placeholder={tr("Buscar…", "Search…")} value={q} onChange={(e) => setQ(e.target.value)} />
       <div className="chips scroll" style={{ marginTop: 8 }}>
@@ -95,7 +96,7 @@ export function VocabPage() {
         <>
           <div className="chips scroll" style={{ marginTop: 6 }}>
             {VSTATES.map((s) => <button key={s.id} className={"chip " + (state === s.id ? "on" : "")} onClick={() => setState(state === s.id ? "" : s.id)}>{s.name} {counts[s.id] ? `(${counts[s.id]})` : ""}</button>)}
-            <button className={"chip " + (showArchived ? "on" : "")} onClick={() => setShowArchived(!showArchived)}>🗄️ {tr("Retiradas", "Retired")}</button>
+            <button className={"chip " + (showArchived ? "on" : "")} onClick={() => setShowArchived(!showArchived)}><Icon name="archive" size={16} /> {tr("Retiradas", "Retired")}</button>
           </div>
           {list.length === 0 ? (
             <Empty>{all.length === 0 ? tr("Aún no tienes palabras. Toca cualquier palabra en un texto y pulsa “Add to Vocabulary”, o agrega desde la biblioteca curada.", "No words yet.") : tr("Nada con estos filtros.", "Nothing here.")}</Empty>
@@ -104,7 +105,7 @@ export function VocabPage() {
               <div className="grow">
                 <div className="row between"><span className="serif" style={{ fontSize: "1.1em" }}>{v.w}</span><span className="tag">{vstate(v)}</span></div>
                 <div className="small muted" style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{v.pos ? v.pos + " · " : ""}{v.def}</div>
-                {shouldProbablyKnow(v, lvl) && <span className="tag gold">⭐ should know</span>}
+                {shouldProbablyKnow(v, lvl) && <span className="tag gold"><Icon name="star" size={16} /> should know</span>}
               </div>
             </button>
           ))}
@@ -145,14 +146,14 @@ export function WordPage({ id }: { id: string }) {
   };
   return (
     <div>
-      <Topbar title={v.w} back="#/vocab" right={<button className="iconbtn" onClick={() => setEdit(!edit)}>{edit ? "✓" : "✎"}</button>} />
+      <Topbar title={v.w} back="#/vocab" right={<button className="iconbtn" onClick={() => setEdit(!edit)}><Icon name={edit ? "check" : "edit"} size={19} /></button>} />
       <div className="card">
         <div className="row between">
           <div>
             <div className="serif" style={{ fontSize: "2em" }}>{v.w}</div>
             <div className="small muted">{v.pos}{v.ipa ? ` · /${v.ipa}/` : ""}{v.ipaUS && v.ipaUS !== v.ipa ? ` · US /${v.ipaUS}/` : ""}</div>
           </div>
-          <button className="iconbtn" onClick={() => speak(v.w, { accent: settings.accents[0] })}>🔊</button>
+          <button className="iconbtn" onClick={() => speak(v.w, { accent: settings.accents[0] })}><Icon name="speaker" size={16} /></button>
         </div>
         <div className="chips" style={{ marginTop: 8 }}>
           <span className="tag gold">{vstate(v)}</span>
@@ -187,7 +188,7 @@ export function WordPage({ id }: { id: string }) {
         {v.archived ? (
           <button className="btn grow" onClick={() => { save({ ...v, archived: false }); toast(tr("Recuperada a tu lista activa", "Restored")); }}>↩ {tr("Recuperar", "Restore")}</button>
         ) : (
-          <button className="btn grow" onClick={() => { save({ ...v, archived: true }); toast(tr("Retirada (no borrada). Puedes recuperarla en “Retiradas”.", "Retired (not deleted).")); }}>🗄️ {tr("Retirar de la lista activa", "Retire")}</button>
+          <button className="btn grow" onClick={() => { save({ ...v, archived: true }); toast(tr("Retirada (no borrada). Puedes recuperarla en “Retiradas”.", "Retired (not deleted).")); }}><Icon name="archive" size={16} /> {tr("Retirar de la lista activa", "Retire")}</button>
         )}
       </div>
     </div>

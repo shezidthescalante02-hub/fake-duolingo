@@ -5,11 +5,11 @@ import { mkdirSync, writeFileSync } from "node:fs";
 await esbuild.build({ entryPoints: ["src/owl/owlSvg.ts"], bundle: true, format: "esm", outfile: "/tmp/owlSvg.mjs", logLevel: "error" });
 const { owlSvg } = await import("/tmp/owlSvg.mjs");
 mkdirSync("public/icons", { recursive: true });
-const owl = owlSvg({ mood: "smug" }).replace('viewBox="0 0 200 215"', 'viewBox="-10 -5 220 225"');
+const owl = owlSvg({ mood: "smug", perch: false, still: true }).replace('viewBox="0 0 240 236"', 'viewBox="-10 -6 260 248"');
 const bg = (size, pad, round) => `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
   <defs><radialGradient id="g" cx="50%" cy="30%" r="80%"><stop offset="0%" stop-color="#3a1418"/><stop offset="100%" stop-color="#140d0f"/></radialGradient></defs>
   <rect width="${size}" height="${size}" rx="${round}" fill="url(#g)"/>
-  <g transform="translate(${pad},${pad}) scale(${(size - 2 * pad) / 225})">${owl.replace(/^<svg[^>]*>/, "").replace(/<\/svg>$/, "")}</g></svg>`;
+  <g transform="translate(${pad},${pad}) scale(${(size - 2 * pad) / 260})">${owl.replace(/^<svg[^>]*>/, "").replace(/<\/svg>$/, "")}</g></svg>`;
 const out = async (name, size, pad, round) => { await sharp(Buffer.from(bg(size, pad, round))).png().toFile(`public/icons/${name}`); };
 await out("icon-192.png", 192, 14, 40);
 await out("icon-512.png", 512, 36, 110);

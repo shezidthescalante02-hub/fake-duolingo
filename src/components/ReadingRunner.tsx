@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { Icon } from "./Icon";
 import type { ReadingSet, Annotation } from "../content/types";
 import { ItemView, type ItemResult } from "./ItemView";
 import { Tap, Timer, useCountdown, Md } from "./ui";
@@ -66,8 +67,8 @@ export function ReadingRunner({ set, mode = "practice", limitSec, onDone, exam }
     <div>
       <div className="row between" style={{ marginBottom: 8 }}>
         <div className="chips">
-          <button className={"chip " + (tab === "text" ? "on" : "")} onClick={() => setTab("text")}>📄 {tr("Texto", "Text")}</button>
-          <button className={"chip " + (tab === "q" ? "on" : "")} onClick={() => setTab("q")}>❓ {tr("Preguntas", "Questions")} {Math.min(qi + 1, set.questions.length)}/{set.questions.length}</button>
+          <button className={"chip " + (tab === "text" ? "on" : "")} onClick={() => setTab("text")}><Icon name="text" size={16} /> {tr("Texto", "Text")}</button>
+          <button className={"chip " + (tab === "q" ? "on" : "")} onClick={() => setTab("q")}><Icon name="help" size={16} /> {tr("Preguntas", "Questions")} {Math.min(qi + 1, set.questions.length)}/{set.questions.length}</button>
         </div>
         {timed && <Timer left={left} total={limitSec!} />}
       </div>
@@ -78,14 +79,14 @@ export function ReadingRunner({ set, mode = "practice", limitSec, onDone, exam }
             <h2 style={{ margin: 0 }}>{set.title}</h2>
             {canResearch && (
               <button className={"btn xs " + (researcher ? "gold" : "ghost")} onClick={() => { if (!researcher && rlrStage === "off") setRlrStage("guess"); else { setResearcher(!researcher); } }}>
-                🔬 Read like a researcher
+                <Icon name="search" size={16} /> Read like a researcher
               </button>
             )}
           </div>
           <div className="tiny muted" style={{ margin: "4px 0 10px" }}>{set.discipline} · {set.genre}{feedback ? " · " + tr("toca cualquier palabra para buscarla", "tap any word") : ""}</div>
           {rlrStage === "guess" && thesisOptions && (
             <div className="feedback neutral">
-              <h4>🔬 {tr("Antes de ver el análisis: ¿cuál de estos fragmentos expresa la afirmación principal (claim) o la postura del autor?", "Which fragment is the main claim?")}</h4>
+              <h4><Icon name="search" size={16} /> {tr("Antes de ver el análisis: ¿cuál de estos fragmentos expresa la afirmación principal (claim) o la postura del autor?", "Which fragment is the main claim?")}</h4>
               {thesisOptions.opts.map((a, i) => (
                 <button key={i} className={"opt " + (guessThesis === null ? "" : i === thesisOptions.answer ? "right" : guessThesis === i ? "wrong" : "dim")} disabled={guessThesis !== null} onClick={() => setGuessThesis(i)}>
                   <span className="k">{String.fromCharCode(65 + i)}</span><span className="serif">“{a.q}”</span>
@@ -109,7 +110,7 @@ export function ReadingRunner({ set, mode = "practice", limitSec, onDone, exam }
           </div>
           {researcher && set.annotations && (
             <div className="card flat tight">
-              <h3>🔬 {tr("Cómo está construido este texto", "How this text is built")}</h3>
+              <h3><Icon name="search" size={16} /> {tr("Cómo está construido este texto", "How this text is built")}</h3>
               {set.annotations.map((a, i) => (
                 <div key={i} className="small" style={{ margin: "6px 0" }}>
                   <span className={"tag " + (a.type === "claim" ? "blue" : a.type === "evidence" ? "green" : a.type === "hedge" ? "gold" : a.type === "counter" ? "red" : "")}>{ANN_LABEL[a.type]} · ¶{a.p + 1}</span> <Md text={a.note} inline />

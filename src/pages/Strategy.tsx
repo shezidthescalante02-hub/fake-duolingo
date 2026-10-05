@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import { Icon } from "../components/Icon";
 import { useApp } from "../state";
 import { Topbar, go, OwlSays, Bar, Md } from "../components/ui";
 import { STRATEGY_LESSONS, standaloneItems } from "../content/index";
@@ -19,7 +20,7 @@ export function StrategyPage() {
     <div>
       <Topbar title={tr("Estrategia de examen", "Exam strategy")} back="#/learn" />
       <div className="card">
-        <h3>🌀 {tr("Tu sobreanálisis", "Your overthinking")}</h3>
+        <h3><Icon name="brain" size={16} /> {tr("Tu sobreanálisis", "Your overthinking")}</h3>
         {ot.total === 0 ? <div className="small muted">{tr("Aún no hay cambios de respuesta registrados.", "No answer changes yet.")}</div> : (
           <>
             <div className="grid2" style={{ marginTop: 6 }}>
@@ -34,18 +35,18 @@ export function StrategyPage() {
             <div className="tiny muted">{tr("Cambios por evidencia", "Evidence-based changes")}: {model.changes.newEvidence} · {tr("por duda", "doubt-based")}: {model.changes.doubt}</div>
           </>
         )}
-        <button className="btn sm" style={{ marginTop: 10 }} onClick={() => go("#/strategy/instinct")}>🧘 {tr("Entrenamiento: primera respuesta", "First-instinct drill")}</button>
+        <button className="btn sm" style={{ marginTop: 10 }} onClick={() => go("#/strategy/instinct")}><Icon name="brain" size={16} /> {tr("Entrenamiento: primera respuesta", "First-instinct drill")}</button>
       </div>
 
       <div className="card">
-        <h3>⏱️ {tr("Presión de tiempo", "Time pressure")}</h3>
+        <h3><Icon name="clock" size={16} /> {tr("Presión de tiempo", "Time pressure")}</h3>
         {pg === null ? <div className="small muted">{tr("Se necesitan más ítems con y sin tiempo para comparar.", "Need more timed/untimed data.")}</div> : (
-          <div className="small">{pg > 4 ? tr(`Rindes unos ${Math.round(pg)} puntos menos con reloj que sin él. Practica en modo TOEFL Hell para acostumbrarte.`, "") : tr("Tu rendimiento con tiempo es similar al rendimiento sin tiempo. 👏", "")}</div>
+          <div className="small">{pg > 4 ? tr(`Rindes unos ${Math.round(pg)} puntos menos con reloj que sin él. Practica en modo TOEFL Hell para acostumbrarte.`, "") : tr("Tu rendimiento con tiempo es similar al rendimiento sin tiempo.", "")}</div>
         )}
       </div>
 
       <div className="card">
-        <h3>🧠 {tr("¿No lo sabías o lo sabías y fallaste?", "Didn't know vs. slipped")}</h3>
+        <h3><Icon name="brain" size={16} /> {tr("¿No lo sabías o lo sabías y fallaste?", "Didn't know vs. slipped")}</h3>
         {totalCauses === 0 ? <div className="small muted">{tr("Sin datos aún.", "No data yet.")}</div> : (
           ([["gap", tr("No lo sabía (laguna de conocimiento)", "Knowledge gap")], ["slip", tr("Lo sabía: error de ejecución", "Slip")], ["overthink", tr("Sobreanálisis", "Overthinking")], ["pressure", tr("Presión de tiempo", "Pressure")], ["strategy", tr("Cayó en una trampa conocida", "Fell for a known trap")], ["misread", tr("Leyó mal la pregunta", "Misread")], ["distraction", tr("Distracción", "Distraction")]] as [keyof typeof c, string][]).map(([k, l]) => (
             <div key={k} style={{ margin: "6px 0" }}>
@@ -57,7 +58,7 @@ export function StrategyPage() {
       </div>
 
       <div className="card">
-        <h3>🪤 {tr("Trampas que más te engañan", "Traps that fool you most")}</h3>
+        <h3><Icon name="target" size={16} /> {tr("Trampas que más te engañan", "Traps that fool you most")}</h3>
         {traps.length === 0 ? <div className="small muted">{tr("Aún no hay suficientes datos.", "Not enough data.")}</div> : traps.slice(0, 6).map((t) => (
           <div key={t.k} style={{ margin: "6px 0" }}>
             <div className="row between small"><span>{TRAP_LABEL[t.k as keyof typeof TRAP_LABEL] || t.k}</span><span>{t.fell}/{t.seen}</span></div>
@@ -66,7 +67,7 @@ export function StrategyPage() {
         ))}
       </div>
 
-      <div className="section-title">📘 {tr("Lecciones", "Lessons")}</div>
+      <div className="section-title"><Icon name="learn" size={16} /> {tr("Lecciones", "Lessons")}</div>
       {STRATEGY_LESSONS.map((l) => {
         const st = tagStatus(tagState(model, l.tag));
         return (

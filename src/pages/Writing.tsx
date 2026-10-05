@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Icon } from "../components/Icon";
 import { useApp } from "../state";
 import { Topbar, go, Empty, OwlSays } from "../components/ui";
 import { WRITING_TASKS } from "../content/index";
@@ -25,7 +26,7 @@ export function WritingList() {
         const done = hist.filter((h) => h.taskId === t.id);
         return (
           <button key={t.id} className="unit" style={{ width: "100%", textAlign: "left" }} onClick={() => go(`#/writing/${t.id}`)}>
-            <div className={"node " + (done.length ? "done" : "new")}>✒️</div>
+            <div className={"node " + (done.length ? "done" : "new")}><Icon name="quill" size={22} /></div>
             <div className="grow">
               <div className="serif">{t.title}</div>
               <div className="tiny muted">{t.genre} · {lvlLabel(t.lvl)} · {t.minWords}{t.maxWords ? "–" + t.maxWords : "+"} {tr("palabras", "words")}{done.length ? ` · ${done.length}× · ${tr("mejor", "best")} ${band(Math.max(...done.map((d) => d.score))).code}` : ""}</div>
@@ -35,7 +36,7 @@ export function WritingList() {
       })}
       {hist.length > 0 && (
         <>
-          <div className="section-title">🗂️ {tr("Tus textos", "Your texts")}</div>
+          <div className="section-title"><Icon name="cards" size={16} /> {tr("Tus textos", "Your texts")}</div>
           {hist.slice(0, 15).map((h) => (
             <details key={h.id} className="card tight">
               <summary className="small">{new Date(h.at).toLocaleDateString()} · {h.title} · <b>{band(h.score).code}</b> · {h.words} {tr("pal.", "w.")}</summary>

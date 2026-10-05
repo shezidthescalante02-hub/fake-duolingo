@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Icon } from "./Icon";
 import { useApp } from "../state";
 import { Sheet, Md } from "./ui";
 import { lookup, freqLabel, type DictEntry } from "../services/dictionary";
@@ -51,14 +52,14 @@ export function DictSheet() {
           {entry?.lemmaOf && <div className="tiny muted">{tr("forma base de", "base form of")} “{entry.lemmaOf}”</div>}
         </div>
         <div className="row">
-          {!locked && entry && <button className="iconbtn" aria-label="pronunciar" onClick={() => speak(entry.word, { accent: settings.accents[0] || "en-US" })}>🔊</button>}
-          <button className="iconbtn" onClick={closeDict}>✕</button>
+          {!locked && entry && <button className="iconbtn" aria-label="pronunciar" onClick={() => speak(entry.word, { accent: settings.accents[0] || "en-US" })}><Icon name="speaker" size={16} /></button>}
+          <button className="iconbtn" onClick={closeDict}><Icon name="x" size={19} /></button>
         </div>
       </div>
 
       {locked ? (
         <div className="card flat tight" style={{ marginTop: 10 }}>
-          <div>🔒 {tr("El diccionario está bloqueado en esta actividad, como en el examen real.", "Dictionary locked here, like in the real exam.")}</div>
+          <div><Icon name="lock" size={16} /> {tr("El diccionario está bloqueado en esta actividad, como en el examen real.", "Dictionary locked here, like in the real exam.")}</div>
           <div className="small muted" style={{ marginTop: 6 }}>{tr("Puedes guardar la palabra para estudiarla después sin ver su significado.", "You can save it for later without seeing the meaning.")}</div>
         </div>
       ) : entry === undefined ? (
@@ -83,8 +84,8 @@ export function DictSheet() {
               <div style={{ margin: "4px 0" }}>{seed.def}</div>
               <div className="ex">{seed.ex}</div>
               {seed.col && <div className="small"><b>Collocations:</b> {seed.col.join(" · ")}</div>}
-              {seed.note && <div className="small" style={{ marginTop: 4 }}>💡 <Md text={seed.note} inline /></div>}
-              {seed.err && <div className="small" style={{ marginTop: 4 }}>⚠️ <Md text={seed.err} inline /></div>}
+              {seed.note && <div className="small" style={{ marginTop: 4 }}><Icon name="bulb" size={16} /> <Md text={seed.note} inline /></div>}
+              {seed.err && <div className="small" style={{ marginTop: 4 }}><Icon name="alert" size={16} /> <Md text={seed.err} inline /></div>}
             </div>
           )}
           {entry && entry.senses.slice(0, 5).map((s, i) => (

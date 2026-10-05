@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Icon } from "../components/Icon";
 import { useApp } from "../state";
 import { Topbar, go, Empty, OwlSays } from "../components/ui";
 import { LISTENING_SETS } from "../content/index";
@@ -20,7 +21,7 @@ export function ListeningList() {
       <div style={{ height: 8 }} />
       {[...LISTENING_SETS].sort((a, b) => a.lvl - b.lvl).map((s) => (
         <button key={s.id} className="unit" style={{ width: "100%", textAlign: "left" }} onClick={() => go(`#/listening/${s.id}`)}>
-          <div className={"node " + (seen.includes(s.id) ? "done" : "new")}>🎧</div>
+          <div className={"node " + (seen.includes(s.id) ? "done" : "new")}><Icon name="headphones" size={22} /></div>
           <div className="grow">
             <div className="serif">{s.title}</div>
             <div className="tiny muted">{lvlLabel(s.lvl)} · {s.type} · {Array.from(new Set(s.voices.map((v) => v.accent))).join(" / ")}</div>

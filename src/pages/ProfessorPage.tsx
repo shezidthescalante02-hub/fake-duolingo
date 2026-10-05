@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Icon } from "../components/Icon";
 import { useApp } from "../state";
 import { Topbar, Md, Owl, go } from "../components/ui";
 import { ALL_LESSONS } from "../content/index";
@@ -42,7 +43,7 @@ export function ProfessorPage() {
     } catch (e: any) { setChat([...next, { role: "model", text: offline(text) + "\n\n_(" + (e.message || e) + ")_" }]); } finally { setBusy(false); }
   };
 
-  if (lock.professor) return <div><Topbar title="Professor Mode" back /><div className="empty">🔒</div></div>;
+  if (lock.professor) return <div><Topbar title="Professor Mode" back /><div className="empty"><Icon name="lock" size={16} /></div></div>;
   return (
     <div>
       <Topbar title="Professor Mode" back />
@@ -54,7 +55,7 @@ export function ProfessorPage() {
       {chat.map((m, i) => (
         <div key={i} style={{ margin: "10px 0", textAlign: m.role === "user" ? "right" : "left" }}>
           <div className={m.role === "user" ? "chip on" : "card flat tight"} style={{ display: "inline-block", maxWidth: "100%", textAlign: "left", borderRadius: 14 }}>
-            {m.role === "user" ? m.text : <>{m.text.split(/→ (#\/lesson\/[\w-]+)/).map((part, k) => k % 2 ? <button key={k} className="btn xs" onClick={() => go(part)}>📘 {tr("Abrir lección", "Open lesson")}</button> : <Md key={k} text={part} />)}</>}
+            {m.role === "user" ? m.text : <>{m.text.split(/→ (#\/lesson\/[\w-]+)/).map((part, k) => k % 2 ? <button key={k} className="btn xs" onClick={() => go(part)}><Icon name="learn" size={16} /> {tr("Abrir lección", "Open lesson")}</button> : <Md key={k} text={part} />)}</>}
           </div>
         </div>
       ))}

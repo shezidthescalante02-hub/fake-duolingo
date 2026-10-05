@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Icon } from "../components/Icon";
 import { useApp } from "../state";
 import { Topbar, go, Empty, OwlSays } from "../components/ui";
 import { READINGS, addCustomReading } from "../content/index";
@@ -37,24 +38,24 @@ export function ReadingList() {
   return (
     <div>
       <Topbar title="Reading" back="#/learn" right={<span className="levelpill">{band(model.skills.reading.theta).code}</span>} />
-      <div className="small muted">{tr("Textos originales de distintas disciplinas, progresivamente más difíciles. Usa 🔬 “Read like a researcher” para ver cómo está construido cada texto.", "Original texts by discipline.")}</div>
+      <div className="small muted">{tr("Textos originales de distintas disciplinas, progresivamente más difíciles. Usa “Read like a researcher” para ver cómo está construido cada texto.", "Original texts by discipline.")}</div>
       <div className="chips scroll" style={{ margin: "10px 0" }}>
         <button className={"chip " + (!d ? "on" : "")} onClick={() => setD("")}>{tr("Todas", "All")}</button>
-        <button className={"chip " + (d === "culture" ? "on" : "")} onClick={() => setD("culture")}>🌍 {tr("Cultura general", "General knowledge")}</button>
+        <button className={"chip " + (d === "culture" ? "on" : "")} onClick={() => setD("culture")}><Icon name="globe" size={16} /> {tr("Cultura general", "General knowledge")}</button>
         {Array.from(new Set(READINGS.map((r) => r.discipline))).map((x) => <button key={x} className={"chip " + (d === x ? "on" : "")} onClick={() => setD(x)}>{x}</button>)}
       </div>
       {list.map((r) => (
         <button key={r.id} className="unit" style={{ width: "100%", textAlign: "left" }} onClick={() => go(`#/reading/${r.id}`)}>
-          <div className={"node " + (seen.includes(r.id) ? "done" : "new")}>📖</div>
+          <div className={"node " + (seen.includes(r.id) ? "done" : "new")}><Icon name="book" size={22} /></div>
           <div className="grow">
             <div className="serif">{r.title}</div>
-            <div className="tiny muted">{lvlLabel(r.lvl)} · {r.discipline} · {r.questions.length} {tr("preguntas", "questions")}{r.annotations ? " · 🔬" : ""}{r.source ? " · ✨IA" : ""}</div>
+            <div className="tiny muted">{lvlLabel(r.lvl)} · {r.discipline} · {r.questions.length} {tr("preguntas", "questions")}{r.annotations ? " · researcher" : ""}{r.source ? " · IA" : ""}</div>
           </div>
         </button>
       ))}
       {list.length === 0 && <Empty>{tr("Aún no hay textos en esta categoría.", "None yet.")}</Empty>}
       <div className="card">
-        <h3>✨ {tr("Generar un texto nuevo", "Generate a new text")}</h3>
+        <h3><Icon name="sparkle" size={16} /> {tr("Generar un texto nuevo", "Generate a new text")}</h3>
         {aiReady() ? (
           <>
             <div className="small muted">{tr("Texto original + 8 preguntas a tu nivel, en la disciplina que elijas.", "Original text + 8 questions at your level.")}</div>

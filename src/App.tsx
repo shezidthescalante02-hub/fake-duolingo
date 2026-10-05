@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useApp } from "./state";
 import { DictSheet } from "./components/DictSheet";
-import { Owl, Confetti } from "./components/ui";
+import { Owl, Confetti, XpFloat } from "./components/ui";
+import { Icon } from "./components/Icon";
+import { EndlessHub, EndlessPage } from "./pages/Endless";
 import { ACHIEVEMENTS, titleFor } from "./engine/game";
 import { loadCustom } from "./content/index";
 import { Home } from "./pages/Home";
@@ -41,21 +43,22 @@ export function parseRoute(h: string) {
 }
 
 const NAV = [
-  { h: "#/", i: "🏠", es: "Hoy", en: "Today" },
-  { h: "#/learn", i: "📚", es: "Aprender", en: "Learn" },
-  { h: "#/vocab", i: "🗂️", es: "Vocab", en: "Vocab" },
-  { h: "#/sims", i: "🎓", es: "Exámenes", en: "Exams" },
-  { h: "#/dashboard", i: "📊", es: "Progreso", en: "Progress" },
+  { h: "#/", i: "home", es: "Hoy", en: "Today" },
+  { h: "#/learn", i: "learn", es: "Aprender", en: "Learn" },
+  { h: "#/vocab", i: "cards", es: "Vocab", en: "Vocab" },
+  { h: "#/sims", i: "exam", es: "Exámenes", en: "Exams" },
+  { h: "#/dashboard", i: "chart", es: "Progreso", en: "Progress" },
 ];
 const SIDE_EXTRA = [
-  { h: "#/writing", i: "✒️", es: "Writing", en: "Writing" },
-  { h: "#/reading", i: "📖", es: "Reading", en: "Reading" },
-  { h: "#/listening", i: "🎧", es: "Listening", en: "Listening" },
-  { h: "#/speaking", i: "🎙️", es: "Speaking", en: "Speaking" },
-  { h: "#/phd", i: "🎓", es: "Modo Doctorado", en: "PhD Mode" },
-  { h: "#/professor", i: "🧑‍🏫", es: "Professor Mode", en: "Professor Mode" },
-  { h: "#/dict", i: "🔎", es: "Diccionario", en: "Dictionary" },
-  { h: "#/settings", i: "⚙️", es: "Ajustes", en: "Settings" },
+  { h: "#/endless", i: "infinity", es: "Práctica infinita", en: "Endless practice" },
+  { h: "#/writing", i: "quill", es: "Writing", en: "Writing" },
+  { h: "#/reading", i: "book", es: "Reading", en: "Reading" },
+  { h: "#/listening", i: "headphones", es: "Listening", en: "Listening" },
+  { h: "#/speaking", i: "mic", es: "Speaking", en: "Speaking" },
+  { h: "#/phd", i: "scroll", es: "Modo Doctorado", en: "PhD Mode" },
+  { h: "#/professor", i: "teacher", es: "Professor Mode", en: "Professor Mode" },
+  { h: "#/dict", i: "search", es: "Diccionario", en: "Dictionary" },
+  { h: "#/settings", i: "gear", es: "Ajustes", en: "Settings" },
 ];
 
 export function App() {
@@ -66,13 +69,13 @@ export function App() {
   const [customReady, setCustomReady] = useState(false);
   useEffect(() => { loadCustom().finally(() => setCustomReady(true)); }, []);
 
-  if (!ready || !customReady) return <div className="boot"><div className="boot-owl">🦉</div><div className="boot-text">Fake Duolingo</div></div>;
+  if (!ready || !customReady) return <Boot />;
 
   const { parts, q } = parseRoute(hash);
   const r = parts[0] || "";
   if (!settings.onboarded && r !== "diagnostic" && r !== "onboarding" && r !== "settings") return <div className="main full"><Onboarding /><Overlays /></div>;
 
-  const full = ["session", "diagnostic", "lesson", "practice", "sim", "reading", "listening", "writing", "speaking", "phd", "onboarding"].includes(r) && parts.length > 1 || r === "diagnostic" || r === "session";
+  const full = ["session", "diagnostic", "lesson", "practice", "sim", "reading", "listening", "writing", "speaking", "phd", "onboarding", "endless"].includes(r) && parts.length > 1 || r === "diagnostic" || r === "session";
 
   let page: React.ReactNode;
   switch (r) {
@@ -102,6 +105,7 @@ export function App() {
     case "professor": page = <ProfessorPage />; break;
     case "settings": page = <SettingsPage />; break;
     case "generate": page = <GeneratePage />; break;
+    case "endless": page = parts[1] ? <EndlessPage mode={parts[1]} /> : <EndlessHub />; break;
     default: page = <Home />;
   }
 
@@ -109,17 +113,21 @@ export function App() {
   return (
     <div className="app">
       <nav className="sidebar">
-        <div className="brand"><div className="owl-mini"><Owl size={40} anim="none" /></div> Fake Duolingo</div>
-        {[...NAV, ...SIDE_EXTRA].map((n) => (
-          <button key={n.h} className={navActive(n.h) ? "on" : ""} onClick={() => (location.hash = n.h)}><span>{n.i}</span>{tr(n.es, n.en)}</button>
+        <div className="brand"><div className="owl-mini"><Owl size={44} anim="idle" perch={false} /></div> Fake Duolingo</div>
+        {NAV.map((n) => (
+          <button key={n.h} className={navActive(n.h) ? "on" : ""} onClick={() => (location.hash = n.h)}><Icon name={n.i} size={19} />{tr(n.es, n.en)}</button>
+        ))}
+        <div className="sep" />
+        {SIDE_EXTRA.map((n) => (
+          <button key={n.h} className={navActive(n.h) ? "on" : ""} onClick={() => (location.hash = n.h)}><Icon name={n.i} size={19} />{tr(n.es, n.en)}</button>
         ))}
       </nav>
-      <main className={"main" + (full ? " full" : "")}>{page}</main>
+      <main className={"main" + (full ? " full" : "")}><div className="page" key={parts.slice(0, 2).join("/")}>{page}</div></main>
       {!full && (
         <div className="tabbar">
           {NAV.map((n) => (
             <button key={n.h} className={navActive(n.h) ? "on" : ""} onClick={() => (location.hash = n.h)}>
-              <span className="ico">{n.i}</span>{tr(n.es, n.en)}
+              <Icon name={n.i} size={22} />{tr(n.es, n.en)}
             </button>
           ))}
         </div>
@@ -136,14 +144,16 @@ function Overlays() {
   return (
     <>
       <DictSheet />
+      <XpFloat />
       {toastMsg && <div className="toast">{toastMsg}</div>}
       {levelUp && !quiet && (
         <>
           <Confetti />
           <div className="sheet-bg" onClick={clearLevelUp} />
-          <div className="sheet center">
+          <div className="sheet center levelup">
             <div className="grab" />
-            <div style={{ width: 130, margin: "0 auto" }}><Owl mood="proud" size={130} anim="hop" /></div>
+            <div className="rays" />
+            <div style={{ width: 150, margin: "0 auto" }}><Owl mood="proud" size={150} anim="hop" /></div>
             <div className="serif" style={{ fontSize: "1.6em" }}>{tr("¡Nivel", "Level")} {levelUp}!</div>
             <div className="gold">“{titleFor(levelUp)}”</div>
             <p className="small muted">LEVEL UP. Somewhere, a Cambridge examiner felt a chill.</p>
@@ -157,11 +167,21 @@ function Overlays() {
           <div className="sheet center">
             <div className="grab" />
             <div className="small muted">{tr("Logro desbloqueado", "Achievement unlocked")}</div>
-            {newAch.map((id) => { const a = ACHIEVEMENTS.find((x) => x.id === id); return a ? <div key={id} style={{ margin: "10px 0" }}><div style={{ fontSize: 40 }}>{a.icon}</div><div className="serif" style={{ fontSize: "1.3em" }}>{a.name}</div><div className="small muted">{a.desc}</div></div> : null; })}
+            {newAch.map((id) => { const a = ACHIEVEMENTS.find((x) => x.id === id); return a ? <div key={id} style={{ margin: "10px 0" }}><div className="ach-ico pop"><Icon name={a.icon} size={34} /></div><div className="serif" style={{ fontSize: "1.3em" }}>{a.name}</div><div className="small muted">{a.desc}</div></div> : null; })}
             <button className="btn primary" onClick={clearAch}>OK</button>
           </div>
         </>
       )}
     </>
+  );
+}
+
+function Boot() {
+  return (
+    <div className="boot">
+      <div className="boot-owl"><Owl size={120} anim="idle" perch={false} /></div>
+      <div className="boot-text">Fake Duolingo</div>
+      <div className="boot-bar"><i /></div>
+    </div>
   );
 }

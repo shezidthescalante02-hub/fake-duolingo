@@ -7,6 +7,7 @@ import { diff, type DiffId } from "./difficulty";
 import { db } from "../db/db";
 import { isDue, vstate, type VocabEntry } from "./vocab";
 import type { Settings } from "../state";
+import { generateMixed, generate, modeForTag } from "./generator";
 
 export type Activity =
   | { k: "teach"; lesson: Lesson; reason: string }
@@ -19,7 +20,10 @@ export type Activity =
 
 const COST: Record<string, number> = { teach: 120, item: 40, vocab: 18, reading: 540, listening: 420, useWords: 300, speaking: 180 };
 export function activityCost(a: Activity): number {
-  if (a.k === "item") return a.item.kind === "produce" ? 300 : a.item.kind === "kwt" ? 70 : a.item.kind === "ctest" ? 150 : 40;
+  if (a.k === "item") {
+    const k = a.item.kind;
+    return k === "produce" ? 300 : k === "kwt" ? 70 : k === "ctest" ? 150 : k === "match" || k === "sort" ? 60 : k === "dictation" || k === "fix" ? 55 : 40;
+  }
   return COST[a.k];
 }
 
@@ -44,7 +48,7 @@ export function pickItems(pool: Item[], n: number, target: number, exclude: Set<
   return out;
 }
 
-export async function buildSession(opts: { minutes: number | null; diffId: DiffId; model: Model; settings: Settings; focus?: string }): Promise<Activity[]> {
+export async function buildSession(opts: { minutes: number | null; diffId: DiffId; model: Model; settings: Settings; focus?: string; seen?: Set<string> }): Promise<Activity[]> {
   const { model, settings } = opts;
   const d = diff(opts.diffId);
   const budget = (opts.minutes ?? 20) * 60;
@@ -53,6 +57,7 @@ export async function buildSession(opts: { minutes: number | null; diffId: DiffI
   const push = (a: Activity) => { acts.push(a); used += activityCost(a); };
   const left = () => budget - used;
   const exclude = await recentItemIds(3);
+  for (const id of opts.seen || []) exclude.add(id);
   const theta = (skill: string) => (model.skills[skill]?.theta ?? 55) + d.lvlOffset;
   const skip = settings.skip;
 
@@ -60,7 +65,14 @@ export async function buildSession(opts: { minutes: number | null; diffId: DiffI
   if (opts.focus) {
     const pool = itemsForTag(opts.focus).filter((it) => it.kind !== "produce" || !skip.writing);
     const sk = pool[0]?.skill || "grammar";
-    for (const it of pickItems(pool, Math.max(4, Math.floor(budget / 45)), theta(sk), exclude, { trapBias: d.trapBias })) push({ k: "item", item: it, reason: "Foco elegido" });
+    const want = Math.max(4, Math.floor(budget / 45));
+    for (const it of pickItems(pool, want, theta(sk), exclude, { trapBias: d.trapBias })) push({ k: "item", item: it, reason: "Foco elegido" });
+    if (acts.length < want) { // banco agotado: repasar ítems ya vistos del mismo tema
+      const again = pickItems(pool.filter((it) => !acts.some((a) => a.k === "item" && a.item.id === it.id) && !(opts.seen?.has(it.id))), want - acts.length, theta(sk), new Set());
+      for (const it of again) push({ k: "item", item: it, reason: "Repaso del tema" });
+    }
+    const m = modeForTag(opts.focus);
+    if (m && acts.length < want) for (const it of await generate(m, want - acts.length, theta(sk), { accents: settings.accents })) push({ k: "item", item: it, reason: "Ejercicio nuevo generado" });
     return acts;
   }
 
@@ -144,10 +156,35 @@ export async function buildSession(opts: { minutes: number | null; diffId: DiffI
     const byLowest = ["grammar", "useOfEnglish", "academicWriting", "strategy"].sort((a, b) => (model.skills[a]?.theta ?? 55) - (model.skills[b]?.theta ?? 55));
     const mixed = pickItems(pool.filter((it) => byLowest.slice(0, 2).includes(it.skill) || Math.random() < 0.35), n, theta(byLowest[0]), exclude, { trapBias: d.trapBias, inferenceBias: d.inferenceBias });
     for (const it of mixed) push({ k: "item", item: it, reason: "Práctica a tu nivel" });
+    // ejercicios generados: siempre una parte (variedad) y todo lo que falte si el banco se agotó
+    const want = Math.max(Math.round(n * 0.3), n - mixed.length);
+    if (want > 0) {
+      const gen = await generateMixed(want, theta("vocabulary"), { listening: skip.listening, pronunciation: skip.pronunciation, reading: skip.reading }, settings.accents);
+      for (const it of gen) { if (exclude.has(it.id)) continue; exclude.add(it.id); push({ k: "item", item: it, reason: "Ejercicio nuevo generado" }); }
+    }
+  }
+  // red de seguridad: una sesión nunca queda vacía
+  if (acts.length < 3) {
+    const gen = await generateMixed(8, theta("vocabulary"), { listening: skip.listening, pronunciation: skip.pronunciation, reading: skip.reading }, settings.accents);
+    for (const it of gen) push({ k: "item", item: it, reason: "Ejercicio nuevo generado" });
   }
 
   // Intercalar: no más de 6 ítems seguidos del mismo tipo; vocabulario repartido
-  return interleave(acts);
+  return interleave(spreadGenerated(acts));
+}
+
+// reparte los ejercicios generados entre el resto para que haya variedad de formato
+function spreadGenerated(acts: Activity[]): Activity[] {
+  const gen = acts.filter((a) => a.k === "item" && a.item.id.startsWith("g-"));
+  if (!gen.length) return acts;
+  const rest = acts.filter((a) => !(a.k === "item" && a.item.id.startsWith("g-")));
+  if (!rest.length) return gen;
+  const out: Activity[] = [];
+  const every = Math.max(1, Math.floor(rest.length / (gen.length + 1)));
+  let g = 0;
+  rest.forEach((a, i) => { out.push(a); if ((i + 1) % every === 0 && g < gen.length) out.push(gen[g++]); });
+  while (g < gen.length) out.push(gen[g++]);
+  return out;
 }
 
 function interleave(acts: Activity[]): Activity[] {

@@ -164,6 +164,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     const p: Profile = { ...profileRef.current, counters: { ...profileRef.current.counters } };
     const before = levelFromXp(p.xp).level;
     p.xp += Math.round(xp);
+    if (xp > 0) { try { window.dispatchEvent(new CustomEvent("fx:xp", { detail: Math.round(xp) })); } catch {} }
     for (const [k, v] of Object.entries(counters || {})) p.counters[k] = (p.counters[k] || 0) + v;
     touchDay(p);
     const after = levelFromXp(p.xp).level;

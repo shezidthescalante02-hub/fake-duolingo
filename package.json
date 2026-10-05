@@ -1,6 +1,6 @@
 {
   "name": "fake-duolingo",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "description": "Fake Duolingo — tutor personal de inglés académico y preparación para TOEFL, Cambridge C1/C2 e IELTS (uso personal).",
   "scripts": {

@@ -50,6 +50,8 @@ Abre `https://TU-USUARIO.github.io/fake-duolingo/` en Chrome o Edge y pulsa el �
 ### Actualizaciones
 Cada vez que subas archivos modificados al repositorio, GitHub genera un APK nuevo en **Releases**. Instálalo encima del anterior: **no se pierde el progreso** (la firma es siempre la misma).
 
+Para subir una actualización: **Add file → Upload files**, arrastra las carpetas/archivos de la actualización y pulsa **Commit changes**. GitHub reemplaza los archivos con el mismo nombre y conserva los demás (por ejemplo, `public/dict`, que no cambia). Si son más de 100 archivos, súbelos en dos tandas.
+
 ### Pasar tu progreso entre dispositivos
 Los datos viven en cada dispositivo (privacidad total). Usa **Ajustes → Datos → Exportar respaldo** y luego **Importar respaldo** en el otro dispositivo. Haz respaldos de vez en cuando.
 
@@ -64,6 +66,12 @@ La app funciona completa sin IA. Si quieres corrección profunda de writing/spea
 Notas honestas: en el nivel gratuito Google puede usar lo que envías para mejorar sus productos y hay límites diarios. La clave se guarda solo en tu dispositivo.
 
 ---
+
+## Novedades de la v1.1
+- **Ejercicios que nunca se acaban**: modo «Estudiar sin límite» y **Práctica infinita** (vocabulario académico, tu vocabulario, amplitud léxica con el diccionario, acento de palabra con ~3 000 palabras, dictado, Complete the Words). La práctica por tema ya no termina: cuando se agota el banco, recicla primero lo que fallaste y, si hay clave de Gemini, genera ejercicios nuevos.
+- **Nuevos formatos**: unir parejas, clasificar, ¿cuál no encaja?, encuentra y corrige el error, dictado, acento de palabra y recuerdo activo con la primera letra.
+- **Rediseño** dark academia: tipografía serif incluida (funciona sin internet), iconos de línea en lugar de emojis, nuevo Strix animado (respira, parpadea, mueve los cuernos, reacciona según su humor) y animaciones en respuestas, rachas, XP, transiciones y resultados.
+- Corrección: los ejercicios de pronunciación con audio ahora tienen botón para escuchar (antes no se podía reproducir el audio).
 
 ## Qué incluye (v1)
 | Módulo | Contenido |
@@ -86,7 +94,8 @@ Notas honestas: en el nivel gratuito Google puede usar lo que envías para mejor
 | Otros | Sesiones por tiempo (5, 10, 20, 30, 60 min o sin límite), 5 niveles de dificultad que cambian parámetros reales, dashboard con gráficas, recordatorios configurables, audio por canales, interfaz en español con opción de inglés, respaldo/restauración. |
 
 ## Limitaciones honestas
-- El banco de contenido es amplio pero **finito**; con la clave gratuita de Gemini puedes generar ejercicios y lecturas nuevas a tu nivel.
+- Los ejercicios infinitos **recombinan** datos reales de la app (definiciones, ejemplos, transcripciones de IPA, oraciones de lecturas y audios); no inventan contenido. La gramática por tema sí tiene un banco finito: al agotarse se recicla (primero lo fallado) y, con la clave gratuita de Gemini, se generan ejercicios nuevos.
+- El acento de palabra usa la pronunciación de referencia del diccionario (CMU/Wiktionary); se excluyeron palabras que cambian de acento según categoría o variedad, pero puede quedar alguna variante discutible.
 - La evaluación **automática** de writing y speaking (sin IA) mide rasgos observables (errores típicos, cohesión, léxico, fluidez) y tiene confianza baja; por eso se combina con autoevaluación y, si quieres, con IA.
 - El audio de Listening se genera con las voces del sistema (texto a voz): claro y con varios acentos, pero sin titubeos ni solapamientos del habla real.
 - Las equivalencias con escalas de examen son aproximadas.
@@ -110,3 +119,5 @@ Tecnología: React + TypeScript (compilado con esbuild), IndexedDB, Capacitor 7 
 - **CMU Pronouncing Dictionary** (licencia BSD).
 - **wordfreq** de Robyn Speer (datos CC BY-SA 4.0).
 - **Multilingual Central Repository 3.0** vía Open Multilingual Wordnet (CC BY 3.0) — equivalentes en español.
+- Tipografía **Lora** (SIL Open Font License 1.1), subconjunto incluido en `public/fonts` (ver `OFL.txt`).
+- Los bancos `public/gen/*.json` (acento y definiciones para ejercicios infinitos) se generan desde el diccionario con `scripts/build_gen.py`.
