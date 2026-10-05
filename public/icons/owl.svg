@@ -1,0 +1,70 @@
+<svg viewBox="-10 -5 220 225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Strix, el búho">
+  <defs>
+    <radialGradient id="bodyGommu4v2" cx="45%" cy="35%" r="75%">
+      <stop offset="0%" stop-color="#a54e5a"/>
+      <stop offset="60%" stop-color="#8c1c2c"/>
+      <stop offset="100%" stop-color="#57111b"/>
+    </radialGradient>
+    <radialGradient id="irisommu4v2" cx="50%" cy="45%" r="60%">
+      <stop offset="0%" stop-color="#ffd76a"/>
+      <stop offset="70%" stop-color="#e09a26"/>
+      <stop offset="100%" stop-color="#a5620e"/>
+    </radialGradient>
+  </defs>
+  <!-- capa de cuello alto -->
+  <path d="M40,128 L24,58 L74,94 Z" fill="#350b11"/>
+  <path d="M160,128 L176,58 L126,94 Z" fill="#350b11"/>
+  <!-- cuernos de plumas -->
+  <path d="M56,74 L40,14 L86,58 Z" fill="#57111b"/>
+  <path d="M144,74 L160,14 L114,58 Z" fill="#57111b"/>
+  <path d="M58,66 L47,28 L76,58 Z" fill="#8c1c2c" opacity="0.6"/>
+  <path d="M142,66 L153,28 L124,58 Z" fill="#8c1c2c" opacity="0.6"/>
+  <!-- cuerpo -->
+  <ellipse cx="100" cy="128" rx="64" ry="76" fill="url(#bodyGommu4v2)"/>
+  <!-- pecho -->
+  <ellipse cx="100" cy="162" rx="36" ry="36" fill="#a54e5a" opacity="0.55"/>
+  <path d="M80,148 l6,5 l6,-5" stroke="#57111b" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.75"/><path d="M94,148 l6,5 l6,-5" stroke="#57111b" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.75"/><path d="M108,148 l6,5 l6,-5" stroke="#57111b" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.75"/><path d="M80,161 l6,5 l6,-5" stroke="#57111b" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.75"/><path d="M94,161 l6,5 l6,-5" stroke="#57111b" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.75"/><path d="M108,161 l6,5 l6,-5" stroke="#57111b" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.75"/><path d="M87,174 l6,5 l6,-5" stroke="#57111b" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.75"/><path d="M101,174 l6,5 l6,-5" stroke="#57111b" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.75"/>
+  <!-- alas -->
+  <path d="M38,112 Q24,168 66,200 Q52,160 60,118 Z" fill="#57111b"/>
+  <path d="M162,112 Q176,168 134,200 Q148,160 140,118 Z" fill="#57111b"/>
+  <path d="M44,140 Q42,170 60,190" stroke="#350b11" stroke-width="2" fill="none" opacity="0.7"/>
+  <path d="M156,140 Q158,170 140,190" stroke="#350b11" stroke-width="2" fill="none" opacity="0.7"/>
+  <!-- disco facial -->
+  <path d="M100,80 C84,64 46,70 48,102 C50,128 82,132 100,120 C118,132 150,128 152,102 C154,70 116,64 100,80 Z" fill="#57111b" opacity="0.85"/>
+  
+    <clipPath id="clipLommu4v2"><circle cx="76" cy="100" r="21"/></clipPath>
+    <circle cx="76" cy="100" r="21" fill="#f3e5c6"/>
+    <circle cx="78" cy="101" r="12.5" fill="url(#irisommu4v2)"/>
+    <circle cx="78" cy="101" r="6" fill="#14060a"/>
+    <circle cx="82" cy="97" r="2.6" fill="#fff" opacity="0.9"/>
+    <g clip-path="url(#clipLommu4v2)">
+      <rect x="53" y="77" width="46" height="19.64" fill="#57111b"/>
+      <line x1="55" y1="96.64" x2="97" y2="96.64" stroke="#350b11" stroke-width="2.5"/>
+    </g>
+    <circle cx="76" cy="100" r="21" fill="none" stroke="#350b11" stroke-width="2.5"/>
+  
+    <clipPath id="clipRommu4v2"><circle cx="124" cy="100" r="21"/></clipPath>
+    <circle cx="124" cy="100" r="21" fill="#f3e5c6"/>
+    <circle cx="126" cy="101" r="12.5" fill="url(#irisommu4v2)"/>
+    <circle cx="126" cy="101" r="6" fill="#14060a"/>
+    <circle cx="130" cy="97" r="2.6" fill="#fff" opacity="0.9"/>
+    <g clip-path="url(#clipRommu4v2)">
+      <rect x="101" y="77" width="46" height="14.599999999999994" fill="#57111b"/>
+      <line x1="103" y1="91.6" x2="145" y2="91.6" stroke="#350b11" stroke-width="2.5"/>
+    </g>
+    <circle cx="124" cy="100" r="21" fill="none" stroke="#350b11" stroke-width="2.5"/>
+  <!-- cejas -->
+  <path d="M50,72 L93,84" stroke="#350b11" stroke-width="7" stroke-linecap="round" fill="none"/>
+  <path d="M108,78 Q130,62 152,66" stroke="#350b11" stroke-width="7" stroke-linecap="round" fill="none"/>
+  <!-- monóculo -->
+  <circle cx="124" cy="100" r="24.5" fill="#ffffff" fill-opacity="0.05" stroke="#d8a640" stroke-width="3"/>
+  <path d="M145,112 Q166,146 146,176" stroke="#d8a640" stroke-width="1.6" fill="none" stroke-dasharray="3 2.5"/>
+  <path d="M91,108 Q100,102 109,108 L103,124 Q100,131 97,124 Z" fill="#d8a640" stroke="#7a5212" stroke-width="1.6"/>
+         <path d="M100,124 Q101,130 97,131" stroke="#7a5212" stroke-width="1.4" fill="none"/>
+  <!-- garras -->
+  <g fill="#d8a640" stroke="#7a5212" stroke-width="1.2">
+    <ellipse cx="80" cy="203" rx="5" ry="4"/><ellipse cx="89" cy="205" rx="5" ry="4"/>
+    <ellipse cx="111" cy="205" rx="5" ry="4"/><ellipse cx="120" cy="203" rx="5" ry="4"/>
+  </g>
+  
+</svg>
