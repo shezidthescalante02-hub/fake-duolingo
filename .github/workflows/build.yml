@@ -1,0 +1,93 @@
+# Compila el APK de Android y publica la versión web (laptop/tablet) en GitHub Pages
+# cada vez que se sube un cambio a la rama main (o manualmente desde la pestaña Actions).
+name: Construir app
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar código
+        uses: actions/checkout@v4
+
+      - name: Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Instalar dependencias
+        run: npm install --no-audit --no-fund
+
+      - name: Compilar la app web
+        run: npm run build
+
+      - name: Java 21 (requerido por Capacitor 7)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Crear proyecto Android
+        run: |
+          npx cap add android
+          node scripts/android-setup.mjs
+          npx cap sync android
+
+      - name: Compilar APK
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleRelease --no-daemon --stacktrace
+
+      - name: Preparar APK
+        run: |
+          mkdir -p out
+          cp android/app/build/outputs/apk/release/app-release.apk out/FakeDuolingo.apk
+          ls -la out
+
+      - name: Guardar APK como artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: FakeDuolingo-apk
+          path: out/FakeDuolingo.apk
+
+      - name: Publicar en Releases (para descargar desde el celular)
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          name: Fake Duolingo v1.0.${{ github.run_number }}
+          body: |
+            Descarga **FakeDuolingo.apk** desde tu celular Android e instálalo.
+            Si ya tienes una versión anterior, se actualiza sin perder tu progreso.
+          files: out/FakeDuolingo.apk
+          make_latest: true
+
+      - name: Preparar sitio web
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  pages:
+    needs: build
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publicar en GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
