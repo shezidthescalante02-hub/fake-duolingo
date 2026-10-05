@@ -1,70 +1,91 @@
-<svg viewBox="-10 -5 220 225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Strix, el búho">
+<svg viewBox="-10 -6 260 248" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Strix, el búho">
   <defs>
-    <radialGradient id="bodyGommu4v2" cx="45%" cy="35%" r="75%">
-      <stop offset="0%" stop-color="#a54e5a"/>
-      <stop offset="60%" stop-color="#8c1c2c"/>
-      <stop offset="100%" stop-color="#57111b"/>
+    <radialGradient id="bodyGoj35kik" cx="40%" cy="30%" r="80%">
+      <stop offset="0%" stop-color="#a14552"/><stop offset="55%" stop-color="#8c1c2c"/><stop offset="100%" stop-color="#2d090e"/>
     </radialGradient>
-    <radialGradient id="irisommu4v2" cx="50%" cy="45%" r="60%">
-      <stop offset="0%" stop-color="#ffd76a"/>
-      <stop offset="70%" stop-color="#e09a26"/>
-      <stop offset="100%" stop-color="#a5620e"/>
+    <radialGradient id="irisoj35kik" cx="50%" cy="42%" r="62%">
+      <stop offset="0%" stop-color="#ffe9a3"/><stop offset="55%" stop-color="#e7a531"/><stop offset="100%" stop-color="#9b5a0c"/>
     </radialGradient>
+    <linearGradient id="goldoj35kik" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f6d98c"/><stop offset="100%" stop-color="#b9862a"/></linearGradient>
+    <linearGradient id="liningoj35kik" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#922737"/><stop offset="100%" stop-color="#2d090e"/></linearGradient>
+    <radialGradient id="bellyGoj35kik" cx="50%" cy="30%" r="70%"><stop offset="0%" stop-color="#a74e54" stop-opacity=".75"/><stop offset="100%" stop-color="#a74e54" stop-opacity=".25"/></radialGradient>
+    <radialGradient id="discoj35kik" cx="50%" cy="40%" r="60%"><stop offset="0%" stop-color="#7b1927"/><stop offset="100%" stop-color="#5c121d"/></radialGradient>
   </defs>
-  <!-- capa de cuello alto -->
-  <path d="M40,128 L24,58 L74,94 Z" fill="#350b11"/>
-  <path d="M160,128 L176,58 L126,94 Z" fill="#350b11"/>
-  <!-- cuernos de plumas -->
-  <path d="M56,74 L40,14 L86,58 Z" fill="#57111b"/>
-  <path d="M144,74 L160,14 L114,58 Z" fill="#57111b"/>
-  <path d="M58,66 L47,28 L76,58 Z" fill="#8c1c2c" opacity="0.6"/>
-  <path d="M142,66 L153,28 L124,58 Z" fill="#8c1c2c" opacity="0.6"/>
-  <!-- cuerpo -->
-  <ellipse cx="100" cy="128" rx="64" ry="76" fill="url(#bodyGommu4v2)"/>
-  <!-- pecho -->
-  <ellipse cx="100" cy="162" rx="36" ry="36" fill="#a54e5a" opacity="0.55"/>
-  <path d="M80,148 l6,5 l6,-5" stroke="#57111b" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.75"/><path d="M94,148 l6,5 l6,-5" stroke="#57111b" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.75"/><path d="M108,148 l6,5 l6,-5" stroke="#57111b" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.75"/><path d="M80,161 l6,5 l6,-5" stroke="#57111b" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.75"/><path d="M94,161 l6,5 l6,-5" stroke="#57111b" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.75"/><path d="M108,161 l6,5 l6,-5" stroke="#57111b" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.75"/><path d="M87,174 l6,5 l6,-5" stroke="#57111b" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.75"/><path d="M101,174 l6,5 l6,-5" stroke="#57111b" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.75"/>
-  <!-- alas -->
-  <path d="M38,112 Q24,168 66,200 Q52,160 60,118 Z" fill="#57111b"/>
-  <path d="M162,112 Q176,168 134,200 Q148,160 140,118 Z" fill="#57111b"/>
-  <path d="M44,140 Q42,170 60,190" stroke="#350b11" stroke-width="2" fill="none" opacity="0.7"/>
-  <path d="M156,140 Q158,170 140,190" stroke="#350b11" stroke-width="2" fill="none" opacity="0.7"/>
-  <!-- disco facial -->
-  <path d="M100,80 C84,64 46,70 48,102 C50,128 82,132 100,120 C118,132 150,128 152,102 C154,70 116,64 100,80 Z" fill="#57111b" opacity="0.85"/>
   
-    <clipPath id="clipLommu4v2"><circle cx="76" cy="100" r="21"/></clipPath>
-    <circle cx="76" cy="100" r="21" fill="#f3e5c6"/>
-    <circle cx="78" cy="101" r="12.5" fill="url(#irisommu4v2)"/>
-    <circle cx="78" cy="101" r="6" fill="#14060a"/>
-    <circle cx="82" cy="97" r="2.6" fill="#fff" opacity="0.9"/>
-    <g clip-path="url(#clipLommu4v2)">
-      <rect x="53" y="77" width="46" height="19.64" fill="#57111b"/>
-      <line x1="55" y1="96.64" x2="97" y2="96.64" stroke="#350b11" stroke-width="2.5"/>
+  <g class="o-all">
+    <g class="o-cape">
+      <path d="M58,168 C40,140 26,98 18,52 C48,74 70,100 84,130 Z" fill="#190508"/>
+      <path d="M182,168 C200,140 214,98 222,52 C192,74 170,100 156,130 Z" fill="#190508"/>
+      <path d="M58,160 C44,134 34,104 28,70 C50,90 66,110 78,132 Z" fill="url(#liningoj35kik)"/>
+      <path d="M182,160 C196,134 206,104 212,70 C190,90 174,110 162,132 Z" fill="url(#liningoj35kik)"/>
+      <path d="M18,52 C26,98 40,140 58,168 M222,52 C214,98 200,140 182,168" stroke="#d9ab4a" stroke-width="1.6" fill="none" opacity=".85"/>
     </g>
-    <circle cx="76" cy="100" r="21" fill="none" stroke="#350b11" stroke-width="2.5"/>
-  
-    <clipPath id="clipRommu4v2"><circle cx="124" cy="100" r="21"/></clipPath>
-    <circle cx="124" cy="100" r="21" fill="#f3e5c6"/>
-    <circle cx="126" cy="101" r="12.5" fill="url(#irisommu4v2)"/>
-    <circle cx="126" cy="101" r="6" fill="#14060a"/>
-    <circle cx="130" cy="97" r="2.6" fill="#fff" opacity="0.9"/>
-    <g clip-path="url(#clipRommu4v2)">
-      <rect x="101" y="77" width="46" height="14.599999999999994" fill="#57111b"/>
-      <line x1="103" y1="91.6" x2="145" y2="91.6" stroke="#350b11" stroke-width="2.5"/>
+    <g class="o-body">
+      <path d="M120,54 C170,54 192,96 192,144 C192,196 160,230 120,230 C80,230 48,196 48,144 C48,96 70,54 120,54 Z" fill="url(#bodyGoj35kik)"/>
+      <ellipse cx="120" cy="184" rx="46" ry="46" fill="url(#bellyGoj35kik)"/>
+      <path d="M70,92 C80,72 100,62 120,60" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".12"/>
+      <path d="M86.8,160 q5,6 10,0" stroke="#78383c" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".55"/><path d="M100.9,160 q5,6 10,0" stroke="#78383c" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".55"/><path d="M115.0,160 q5,6 10,0" stroke="#78383c" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".55"/><path d="M129.1,160 q5,6 10,0" stroke="#78383c" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".55"/><path d="M88.8,171 q5,6 10,0" stroke="#78383c" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".55"/><path d="M101.9,171 q5,6 10,0" stroke="#78383c" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".55"/><path d="M115.0,171 q5,6 10,0" stroke="#78383c" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".55"/><path d="M128.1,171 q5,6 10,0" stroke="#78383c" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".55"/><path d="M141.2,171 q5,6 10,0" stroke="#78383c" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".55"/><path d="M82.3,182 q5,6 10,0" stroke="#78383c" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".55"/><path d="M95.3,182 q5,6 10,0" stroke="#78383c" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".55"/><path d="M108.5,182 q5,6 10,0" stroke="#78383c" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".55"/><path d="M121.5,182 q5,6 10,0" stroke="#78383c" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".55"/><path d="M134.7,182 q5,6 10,0" stroke="#78383c" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".55"/><path d="M93.8,193 q5,6 10,0" stroke="#78383c" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".55"/><path d="M107.9,193 q5,6 10,0" stroke="#78383c" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".55"/><path d="M122.1,193 q5,6 10,0" stroke="#78383c" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".55"/><path d="M136.2,193 q5,6 10,0" stroke="#78383c" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".55"/><path d="M91.3,204 q5,6 10,0" stroke="#78383c" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".55"/><path d="M103.1,204 q5,6 10,0" stroke="#78383c" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".55"/><path d="M115.0,204 q5,6 10,0" stroke="#78383c" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".55"/><path d="M126.9,204 q5,6 10,0" stroke="#78383c" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".55"/>
+      <g class="o-wingL"><path d="M54,118 C36,156 42,200 82,228 C72,200 70,164 80,130 Z" fill="#51101a"/>
+        <path d="M52,150 C50,176 58,196 72,212 M58,136 C56,164 62,186 76,204" stroke="#190508" stroke-width="1.6" fill="none" opacity=".7"/></g>
+      <g class="o-wingR"><path d="M186,118 C204,156 198,200 158,228 C168,200 170,164 160,130 Z" fill="#51101a"/>
+        <path d="M188,150 C190,176 182,196 168,212 M182,136 C184,164 178,186 164,204" stroke="#190508" stroke-width="1.6" fill="none" opacity=".7"/></g>
+      <g class="o-feet" fill="url(#goldoj35kik)" stroke="#8a6014" stroke-width="1.2">
+        <path d="M92,222 q-4,8 -1,12 q3,-2 4,-8z"/><path d="M100,224 q-1,9 2,12 q3,-3 2,-10z"/><path d="M108,222 q2,8 6,11 q1,-4 -2,-9z"/>
+        <path d="M148,222 q4,8 1,12 q-3,-2 -4,-8z"/><path d="M140,224 q1,9 -2,12 q-3,-3 -2,-10z"/><path d="M132,222 q-2,8 -6,11 q-1,-4 2,-9z"/>
+      </g>
     </g>
-    <circle cx="124" cy="100" r="21" fill="none" stroke="#350b11" stroke-width="2.5"/>
-  <!-- cejas -->
-  <path d="M50,72 L93,84" stroke="#350b11" stroke-width="7" stroke-linecap="round" fill="none"/>
-  <path d="M108,78 Q130,62 152,66" stroke="#350b11" stroke-width="7" stroke-linecap="round" fill="none"/>
-  <!-- monóculo -->
-  <circle cx="124" cy="100" r="24.5" fill="#ffffff" fill-opacity="0.05" stroke="#d8a640" stroke-width="3"/>
-  <path d="M145,112 Q166,146 146,176" stroke="#d8a640" stroke-width="1.6" fill="none" stroke-dasharray="3 2.5"/>
-  <path d="M91,108 Q100,102 109,108 L103,124 Q100,131 97,124 Z" fill="#d8a640" stroke="#7a5212" stroke-width="1.6"/>
-         <path d="M100,124 Q101,130 97,131" stroke="#7a5212" stroke-width="1.4" fill="none"/>
-  <!-- garras -->
-  <g fill="#d8a640" stroke="#7a5212" stroke-width="1.2">
-    <ellipse cx="80" cy="203" rx="5" ry="4"/><ellipse cx="89" cy="205" rx="5" ry="4"/>
-    <ellipse cx="111" cy="205" rx="5" ry="4"/><ellipse cx="120" cy="203" rx="5" ry="4"/>
+    <g class="o-head" style="transform-origin:120px 150px"><g transform="rotate(-1.35 120 150)">
+      <g class="o-tuft o-tuftL">
+      <path d="M80,76 C72,56 60,34 48,10 C70,24 92,44 104,66 Z" fill="#51101a"/>
+      <path d="M82,70 C76,54 66,38 58,22 C74,34 88,48 98,64 Z" fill="#8c1c2c" opacity=".75"/>
+      <path d="M84,66 C78,52 70,40 64,30" stroke="#190508" stroke-width="1.4" fill="none" opacity=".6"/>
+    </g><g class="o-tuft o-tuftR">
+      <path d="M160,76 C168,56 180,34 192,10 C170,24 148,44 136,66 Z" fill="#51101a"/>
+      <path d="M158,70 C164,54 174,38 182,22 C166,34 152,48 142,64 Z" fill="#8c1c2c" opacity=".75"/>
+      <path d="M156,66 C162,52 170,40 176,30" stroke="#190508" stroke-width="1.4" fill="none" opacity=".6"/>
+    </g>
+      <path d="M120,92 C104,72 62,72 58,104 C54,138 92,150 120,134 C148,150 186,138 182,104 C178,72 136,72 120,92 Z" fill="url(#discoj35kik)"/>
+      <path d="M120,92 C104,72 62,72 58,104 C54,138 92,150 120,134 C148,150 186,138 182,104 C178,72 136,72 120,92 Z" fill="none" stroke="#190508" stroke-width="2" opacity=".7"/>
+      <g class="o-eye">
+      <clipPath id="cLoj35kik"><circle cx="94" cy="106" r="19"/></clipPath>
+      <circle cx="94" cy="106" r="22.5" fill="#190508"/>
+      <circle cx="94" cy="106" r="19" fill="url(#irisoj35kik)"/>
+      <g clip-path="url(#cLoj35kik)">
+        <g class="o-pupil"><circle cx="97" cy="108" r="7" fill="#120306"/>
+          <circle cx="102" cy="103" r="3" fill="#fff" opacity=".92"/>
+          <circle cx="93" cy="113" r="1.3" fill="#fff" opacity=".55"/>
+        </g>
+        <path d="M72,83 L116,83 L116,102.2 Q94,105.84 72,104.48 Z" fill="#51101a"/>
+        <path d="M116,102.2 Q94,105.84 72,104.48" stroke="#190508" stroke-width="2.6" fill="none"/>
+
+      </g>
+      <circle cx="94" cy="106" r="19" fill="none" stroke="#190508" stroke-width="2"/>
+    </g>
+      <g class="o-eye">
+      <clipPath id="cRoj35kik"><circle cx="146" cy="106" r="19"/></clipPath>
+      <circle cx="146" cy="106" r="22.5" fill="#190508"/>
+      <circle cx="146" cy="106" r="19" fill="url(#irisoj35kik)"/>
+      <g clip-path="url(#cRoj35kik)">
+        <g class="o-pupil"><circle cx="149" cy="108" r="7" fill="#120306"/>
+          <circle cx="154" cy="103" r="3" fill="#fff" opacity=".92"/>
+          <circle cx="145" cy="113" r="1.3" fill="#fff" opacity=".55"/>
+        </g>
+        <path d="M168,83 L124,83 L124,98.4 Q146,102.04 168,100.68 Z" fill="#51101a"/>
+        <path d="M124,98.4 Q146,102.04 168,100.68" stroke="#190508" stroke-width="2.6" fill="none"/>
+
+      </g>
+      <circle cx="146" cy="106" r="19" fill="none" stroke="#190508" stroke-width="2"/>
+    </g>
+      <path class="o-brow" d="M66.53357837507993,77.86568649968027 L107.57648156273616,83.69407374905535 L105.0541110623583,93.78355575056679 L65.78656864996803,80.85372540012789 Z" fill="#190508" stroke="#190508" stroke-width="2.5" stroke-linejoin="round"/><path class="o-brow" d="M175.36783465175404,69.89278217251346 L134.13223874381876,77.77412914606252 L137.12065675370874,87.7355225123625 L176.2528661392984,72.84288713099461 Z" fill="#190508" stroke="#190508" stroke-width="2.5" stroke-linejoin="round"/>
+      <g class="o-monocle">
+        <circle cx="146" cy="106" r="24" fill="#fff" fill-opacity=".05" stroke="url(#goldoj35kik)" stroke-width="3.2"/>
+        <path class="o-glint" d="M132,96 Q138,88 148,86" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" opacity=".55"/>
+        <path d="M168,116 Q186,148 170,176" stroke="#d9ab4a" stroke-width="1.5" fill="none" stroke-dasharray="3 2.6"/>
+      </g>
+      <g class="o-beak"><path d="M110,121 Q120,114 130,121 Q128,134 121,145 Q119,147 118,144 Q112,133 110,121 Z" fill="url(#goldoj35kik)" stroke="#8a6014" stroke-width="1.4"/>
+           <path d="M124,131 Q129,133 133,130" stroke="#8a6014" stroke-width="1.6" fill="none" stroke-linecap="round"/></g>
+    </g></g>
+    
   </g>
   
 </svg>
