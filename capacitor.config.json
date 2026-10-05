@@ -1,0 +1,16 @@
+{
+  "appId": "com.sheshi.fakeduolingo",
+  "appName": "Fake Duolingo",
+  "webDir": "dist",
+  "backgroundColor": "#140d0f",
+  "android": {
+    "backgroundColor": "#140d0f",
+    "allowMixedContent": false,
+    "captureInput": false,
+    "webContentsDebuggingEnabled": false,
+    "adjustMarginsForEdgeToEdge": "auto"
+  },
+  "server": {
+    "androidScheme": "https"
+  }
+}

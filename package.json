@@ -1,0 +1,25 @@
+{
+  "name": "fake-duolingo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Fake Duolingo — tutor personal de inglés académico y preparación para TOEFL, Cambridge C1/C2 e IELTS (uso personal).",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "node scripts/build.mjs --serve",
+    "cap:android": "npx cap add android"
+  },
+  "dependencies": {
+    "@capacitor-community/speech-recognition": "7.0.1",
+    "@capacitor-community/text-to-speech": "6.1.0",
+    "@capacitor/android": "7.6.9",
+    "@capacitor/app": "7.1.2",
+    "@capacitor/core": "7.6.9",
+    "@capacitor/local-notifications": "7.0.7",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "7.6.9",
+    "esbuild": "0.28.2"
+  }
+}

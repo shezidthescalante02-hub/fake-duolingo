@@ -1,0 +1,155 @@
+import type { ListeningSet } from "./types";
+import { mcq, gap } from "./helpers";
+
+// Guiones originales. El audio se genera con las voces del sistema (TTS) en distintos acentos.
+export const LISTENINGS: ListeningSet[] = [
+  {
+    id: "l-vot", title: "Lecture: Voice Onset Time", type: "lecture", discipline: "phonetics", lvl: 62,
+    voices: [{ name: "Professor", accent: "en-GB", gender: "f" }],
+    lines: [
+      { v: 0, t: "Right, let's get started. Last week we looked at the articulatory description of stop consonants: place, manner and voicing. Today I want to complicate the notion of voicing, because, as you'll see, the labels 'voiced' and 'voiceless' hide quite a lot of variation across languages." },
+      { v: 0, t: "The key measure here is voice onset time, or VOT. It's the interval between the release of the stop closure and the start of vocal fold vibration. If voicing starts at roughly the same moment as the release, we call that short-lag VOT. If there's a noticeable delay, say sixty or seventy milliseconds, that's long-lag VOT, and we hear it as aspiration. And if the vocal folds start vibrating before the release, during the closure itself, we get negative VOT, or prevoicing." },
+      { v: 0, t: "Now, here's where it gets interesting for those of you who speak Spanish. English voiceless stops at the beginning of a stressed syllable, as in 'pin' or 'top', are typically long-lag: they're aspirated. Spanish voiceless stops are short-lag. So a Spanish 'p' and an English 'p' are not, phonetically, the same sound, even though we write them with the same letter." },
+      { v: 0, t: "And the mirror image applies to voiced stops. Spanish 'b' and 'd' at the start of an utterance are often prevoiced. English 'b' and 'd', on the other hand, are frequently produced with short-lag VOT, in other words with no voicing during the closure at all. Which means — and this surprises people — that an English 'b' can be acoustically quite similar to a Spanish 'p'." },
+      { v: 0, t: "This was documented in a classic cross-linguistic study by Lisker and Abramson in the nineteen sixties, and it's been replicated many times since. The practical consequence is that the same VOT value can be categorised differently by listeners of different languages. A short-lag stop sounds like 'p' to a Spanish listener and like 'b' to an English listener." },
+      { v: 0, t: "So, for next week, I'd like you to measure VOT in the recordings on the course page. Don't worry about the statistics yet; I just want you to get comfortable finding the release burst and the onset of voicing in the waveform. That's harder than it sounds, believe me." },
+    ],
+    questions: [
+      mcq("lv1", "ls:gist", 60, "What is the main purpose of the lecture?", ["To show that 'voiced' and 'voiceless' cover different phonetic realities across languages", "To teach students how to use statistics", "To review last week's lecture on place of articulation", "To compare Spanish and English vowels"], 0, "*The labels 'voiced' and 'voiceless' hide quite a lot of variation across languages.*", [null, "Statistics are explicitly postponed.", "Only mentioned as a starting point.", "Vowels aren't discussed."], [null, "word-match", "wrong-focus", "out-of-scope"], { skill: "listening" }),
+      mcq("lv2", "ls:detail", 60, "What is voice onset time?", ["The interval between the release of a stop and the start of vocal fold vibration", "The length of a vowel", "The time it takes to say a word", "The duration of the stop closure"], 0, "Defined directly in the lecture.", undefined, undefined, { skill: "listening" }),
+      mcq("lv3", "ls:detail", 62, "How are English voiceless stops at the start of stressed syllables typically produced?", ["With long-lag VOT (aspirated)", "With prevoicing", "With short-lag VOT", "With no release"], 0, "*Typically long-lag: they're aspirated.*", undefined, undefined, { skill: "listening" }),
+      mcq("lv4", "ls:inference", 66, "Why might an English 'b' be heard as 'p' by a Spanish listener?", ["Because English 'b' is often short-lag, which is how Spanish 'p' is produced", "Because English 'b' is aspirated", "Because Spanish has no 'b' sound", "Because English speakers speak faster"], 0, "English /b/ often short-lag ≈ Spanish /p/ short-lag.", [null, "Aspiration characterises English /p/, not /b/.", "False.", "Speech rate isn't mentioned."], [null, "reversed", "true-not-stated", "out-of-scope"], { skill: "listening" }),
+      mcq("lv5", "ls:attitude", 62, "What does the professor imply about the homework?", ["Locating the burst and voicing onset is more difficult than students might expect", "It is very easy", "It requires advanced statistics", "It is optional"], 0, "*That's harder than it sounds, believe me.*", undefined, undefined, { skill: "listening" }),
+      gap("lv6", "ls:detail", 60, "Voicing that begins before the release of the stop is called ___ (or negative VOT).", ["prevoicing", "pre-voicing"], "*We get negative VOT, or prevoicing.*", { skill: "listening" }),
+    ],
+  },
+  {
+    id: "l-advisor", title: "Conversation: Rethinking the Thesis Chapter", type: "conversation", discipline: "university", lvl: 60,
+    voices: [{ name: "Student", accent: "en-US", gender: "f" }, { name: "Advisor", accent: "en-US", gender: "m" }],
+    lines: [
+      { v: 0, t: "Hi, Dr Harris. Thanks for making time. I wanted to talk about chapter three — I'm a bit stuck." },
+      { v: 1, t: "Sure, come in. I read the draft over the weekend, actually. What's the problem, from your side?" },
+      { v: 0, t: "Well, I've got all this data on vowel length, and I keep adding analyses, but the chapter just feels longer, not better. I'm not sure what the main point is anymore." },
+      { v: 1, t: "That's a very honest diagnosis, and I'd agree with it. The analyses are fine individually. But I finished the chapter without knowing what you wanted me to believe. What's the one finding you'd put in the abstract?" },
+      { v: 0, t: "Probably that younger speakers don't lengthen vowels before voiced consonants as much as older speakers do." },
+      { v: 1, t: "Okay. So build the chapter around that. Lead with it. Then every analysis either supports it, qualifies it, or goes in an appendix." },
+      { v: 0, t: "An appendix? But I spent weeks on the speech rate analysis." },
+      { v: 1, t: "I know, and it's not wasted — it shows you controlled for rate, which a reviewer will want to see. But it doesn't need four pages in the main text. A paragraph and a table would do." },
+      { v: 0, t: "Okay... that makes sense. Should I restructure before the committee meeting, or wait until after?" },
+      { v: 1, t: "Before, if you can. Even a revised outline would help. They'll give you much better feedback on an argument than on a list of results." },
+    ],
+    questions: [
+      mcq("la1", "ls:gist", 58, "Why does the student go to see the advisor?", ["She is unsure about the focus of a chapter", "She wants to change her topic", "She needs more data", "She missed a deadline"], 0, "*I'm not sure what the main point is anymore.*", undefined, undefined, { skill: "listening" }),
+      mcq("la2", "ls:inference", 62, "What is the advisor's main criticism of the draft?", ["It lacks a clear central argument", "The analyses are wrong", "It is too short", "It has too few tables"], 0, "*I finished the chapter without knowing what you wanted me to believe.*", [null, "*The analyses are fine individually.*", "Opposite.", "Not said."], [null, "contradicts", "reversed", "out-of-scope"], { skill: "listening" }),
+      mcq("la3", "ls:attitude", 62, "How does the student initially react to the suggestion about an appendix?", ["Reluctant, because of the time she invested", "Delighted", "Angry and dismissive", "Indifferent"], 0, "*But I spent weeks on the speech rate analysis.*", undefined, undefined, { skill: "listening" }),
+      mcq("la4", "ls:purpose", 64, "Why does the advisor say the speech rate analysis is 'not wasted'?", ["It shows a control that reviewers will expect", "It is the main finding", "It can be published separately", "It explains the age difference"], 0, "*It shows you controlled for rate, which a reviewer will want to see.*", undefined, undefined, { skill: "listening" }),
+      mcq("la5", "ls:detail", 60, "What does the advisor recommend doing before the committee meeting?", ["Prepare at least a revised outline", "Collect more data", "Delete chapter three", "Write the abstract"], 0, "*Even a revised outline would help.*", undefined, undefined, { skill: "listening" }),
+    ],
+  },
+  {
+    id: "l-seminar", title: "Seminar: Is English a Threat to Academic Diversity?", type: "seminar", discipline: "sociology", lvl: 68,
+    voices: [{ name: "Chair", accent: "en-GB", gender: "m" }, { name: "Priya", accent: "en-IN", gender: "f" }, { name: "Liam", accent: "en-AU", gender: "m" }],
+    lines: [
+      { v: 0, t: "Okay, let's open it up. The reading argued that the dominance of English in academic publishing narrows the range of ideas that get circulated. Priya, you had some thoughts?" },
+      { v: 1, t: "Yes. I found the argument persuasive, up to a point. It's clearly true that scholars who write in other languages are cited less internationally. But I'm less convinced that this means fewer ideas circulate. A shared language also means ideas can travel further than before." },
+      { v: 2, t: "Can I come in there? I think that's a fair point, but it assumes the cost of entry is the same for everyone. Writing a paper in a second language takes longer, editing costs money, and reviewers sometimes judge the English rather than the argument. So the ideas that travel are disproportionately those of people who can pay that cost." },
+      { v: 1, t: "I wouldn't disagree with that. My point is more that the alternative — many separate language communities — isn't obviously more diverse. It might just be several smaller monocultures." },
+      { v: 0, t: "That's an interesting reframing. So the question isn't English versus no English, but how the costs of a shared language are distributed?" },
+      { v: 2, t: "Exactly. And there are practical fixes: journals accepting abstracts in multiple languages, free editing support, reviewers being told explicitly not to penalise non-native style." },
+      { v: 1, t: "Although I'd add that the last one is harder than it sounds. Reviewers often don't realise they're doing it." },
+    ],
+    questions: [
+      mcq("ls1", "ls:gist", 64, "What is the main topic of the discussion?", ["Whether and how English dominance in publishing affects the diversity of ideas", "How to write a seminar paper", "The history of English", "Why reviewers reject papers"], 0, "Introduced by the chair and developed throughout.", undefined, undefined, { skill: "listening" }),
+      mcq("ls2", "ls:attitude", 68, "What is Priya's attitude towards the reading's argument?", ["Partially convinced", "Completely convinced", "Totally opposed", "Uninterested"], 0, "*Persuasive, up to a point.*", [null, "*Up to a point* limits her agreement.", "She agrees with parts.", "No."], [null, "too-extreme", "too-extreme", null], { skill: "listening" }),
+      mcq("ls3", "ls:detail", 66, "According to Liam, why is the cost of entry not the same for everyone?", ["Writing in a second language takes more time and money, and reviewers may judge the English", "Some journals are more expensive to subscribe to", "Native speakers write longer papers", "Conferences are held in English-speaking countries"], 0, "Three reasons: time, editing costs, reviewer bias.", undefined, undefined, { skill: "listening" }),
+      mcq("ls4", "ls:inference", 70, "What does Priya mean by 'several smaller monocultures'?", ["Separate language communities might each lack internal diversity", "Many cultures would be better", "English will disappear", "Universities should teach several languages"], 0, "She argues fragmentation isn't automatically more diverse.", undefined, undefined, { skill: "listening" }),
+      mcq("ls5", "ls:organization", 70, "What does the chair do in his second turn?", ["Reformulates the debate as a question about how costs are distributed", "Closes the discussion", "Disagrees with Liam", "Introduces a new reading"], 0, "*So the question isn't… but how the costs… are distributed?*", undefined, undefined, { skill: "listening" }),
+      mcq("ls6", "ls:inference", 72, "Why does Priya say the last fix is 'harder than it sounds'?", ["Reviewers may be biased without being aware of it", "Reviewers refuse to follow instructions", "It is expensive", "Editors don't allow it"], 0, "*Reviewers often don't realise they're doing it.*", undefined, undefined, { skill: "listening" }),
+    ],
+  },
+  {
+    id: "l-announce", title: "Announcement: Library Changes", type: "announcement", discipline: "university", lvl: 54,
+    voices: [{ name: "Announcer", accent: "en-US", gender: "f" }],
+    lines: [
+      { v: 0, t: "Attention, graduate students. Starting Monday the twelfth, the fourth floor of the main library will be closed for renovation until the end of the semester. Reserved study carrels on that floor have been moved to the second floor, west wing. If you had a carrel, your new number has been sent to your university email. Please note that the interlibrary loan desk is not affected and remains on the ground floor. Late-night access after eleven p.m. will now require your student card at the north entrance only." },
+    ],
+    questions: [
+      mcq("lan1", "ls:detail", 52, "Where are the reserved study carrels now?", ["Second floor, west wing", "Fourth floor", "Ground floor", "North entrance"], 0, "Stated directly.", [null, "That floor is closed.", "That's the interlibrary loan desk.", "That's for late-night access."], [null, "word-match", "word-match", "word-match"], { skill: "listening" }),
+      mcq("lan2", "ls:detail", 54, "What has NOT changed?", ["The location of the interlibrary loan desk", "Late-night access", "The fourth floor", "Carrel numbers"], 0, "*The interlibrary loan desk is not affected.*", undefined, undefined, { skill: "listening" }),
+      mcq("lan3", "ls:inference", 56, "What should a student with a carrel do?", ["Check their university email for the new number", "Go to the fourth floor", "Ask at the ground floor", "Apply again"], 0, "*Your new number has been sent to your university email.*", undefined, undefined, { skill: "listening" }),
+    ],
+  },
+  {
+    id: "l-interview", title: "Interview: Fieldwork in Remote Communities", type: "interview", discipline: "anthropology", lvl: 66,
+    voices: [{ name: "Host", accent: "en-IE", gender: "f" }, { name: "Dr Okafor", accent: "en-GB", gender: "m" }],
+    lines: [
+      { v: 0, t: "My guest today has spent nearly two decades doing fieldwork in rural communities. Dr Okafor, people imagine fieldwork as adventurous. Is it?" },
+      { v: 1, t: "Occasionally. Mostly it's slow. You spend a lot of time waiting — for people to be free, for the weather to change, for permission. And honestly, the waiting is part of the method. It's when you learn what people actually care about, as opposed to what you came to ask." },
+      { v: 0, t: "You've written that your early work was, in your words, 'extractive'. What did you mean?" },
+      { v: 1, t: "I mean I arrived with my questions, took my data, and left. The community got very little back. Nothing illegal, nothing unusual for the time. But looking back, I'm not proud of it. These days I agree on the research questions with the community before I start, and we decide together what happens to recordings." },
+      { v: 0, t: "Doesn't that slow things down?" },
+      { v: 1, t: "Enormously. A project that would have taken one year takes three. But the data are better, because people are invested. And frankly, it's the only approach I can justify now." },
+    ],
+    questions: [
+      mcq("li_1", "ls:attitude", 64, "How does Dr Okafor feel about his early work?", ["Regretful", "Proud", "Angry at the community", "Indifferent"], 0, "*Looking back, I'm not proud of it.*", undefined, undefined, { skill: "listening" }),
+      mcq("li_2", "ls:detail", 62, "According to Dr Okafor, why is waiting valuable?", ["It reveals what people actually care about", "It saves money", "It allows time for data analysis", "It is required by universities"], 0, "Stated in his first answer.", undefined, undefined, { skill: "listening" }),
+      mcq("li_3", "ls:inference", 66, "What does 'extractive' mean in this context?", ["Taking data from a community without giving much back", "Removing objects from archaeological sites", "Recording too much data", "Using illegal methods"], 0, "Explained as *took my data, and left. The community got very little back.*", [null, "Literal, wrong context.", "Not the meaning.", "He says *nothing illegal*."], [null, "word-match", null, "contradicts"], { skill: "listening" }),
+      mcq("li_4", "ls:detail", 64, "What disadvantage of his current approach does he admit?", ["Projects take much longer", "The data are worse", "Communities lose interest", "It is more expensive"], 0, "*A project that would have taken one year takes three.*", undefined, undefined, { skill: "listening" }),
+      mcq("li_5", "ls:causal", 66, "Why does he say the data are now better?", ["Because participants are more invested", "Because he uses better equipment", "Because projects are shorter", "Because he works alone"], 0, "*The data are better, because people are invested.*", undefined, undefined, { skill: "listening" }),
+    ],
+  },
+  {
+    id: "l-sleep", title: "Podcast: Sleep and Memory", type: "podcast", discipline: "psychology", lvl: 64,
+    voices: [{ name: "Host", accent: "en-US", gender: "m" }, { name: "Researcher", accent: "en-AU", gender: "f" }],
+    lines: [
+      { v: 0, t: "So, the big question everyone asks: if I study late and then sleep, does the sleep actually help me remember?" },
+      { v: 1, t: "The short answer is yes, on average, but with some important caveats. There's good evidence that sleep after learning supports what we call consolidation — the process of stabilising new memories so they're less vulnerable to interference." },
+      { v: 0, t: "Is that true for all kinds of memory?" },
+      { v: 1, t: "That's where it gets more nuanced. For facts and events — declarative memory — deep slow-wave sleep seems particularly important. For some skills and for emotional memories, other sleep stages may play a role, though the picture there is still being debated." },
+      { v: 0, t: "And what about the classic student move: staying up all night before an exam?" },
+      { v: 1, t: "Generally a bad trade. You gain a few hours of study, but you lose the consolidation of everything you learned earlier, and you're more likely to make careless errors on the day. Attention suffers a lot after sleep deprivation, more than people realise." },
+      { v: 0, t: "So the advice is…?" },
+      { v: 1, t: "Spread your study over several days, test yourself rather than just rereading, and protect your sleep, especially the night before. It's not glamorous, but it works." },
+    ],
+    questions: [
+      mcq("lsl1", "ls:gist", 60, "What is the main topic?", ["How sleep affects memory and study habits", "Why people dream", "How to fall asleep faster", "The history of memory research"], 0, "", undefined, undefined, { skill: "listening" }),
+      mcq("lsl2", "ls:detail", 62, "According to the researcher, which sleep stage seems especially important for declarative memory?", ["Slow-wave sleep", "REM sleep", "Light sleep", "Napping"], 0, "*For facts and events… deep slow-wave sleep seems particularly important.*", undefined, undefined, { skill: "listening" }),
+      mcq("lsl3", "ls:attitude", 64, "How certain is the researcher about the role of sleep in skill and emotional memory?", ["Not very: she says it is still debated", "Completely certain", "She thinks sleep plays no role", "She doesn't mention it"], 0, "*Though the picture there is still being debated.*", [null, "Hedged.", "She says other stages *may* play a role.", "She does."], [null, "too-extreme", "contradicts", null], { skill: "listening" }),
+      mcq("lsl4", "ls:causal", 64, "Why is staying up all night 'a bad trade'?", ["Lost consolidation and impaired attention outweigh the extra study time", "Exams are usually in the morning", "Studying at night is illegal in dormitories", "Caffeine is unhealthy"], 0, "Both reasons are stated.", undefined, undefined, { skill: "listening" }),
+      mcq("lsl5", "ls:detail", 60, "Which is NOT part of her final advice?", ["Study only the night before", "Spread study over several days", "Test yourself", "Protect your sleep"], 0, "She recommends the opposite of cramming.", undefined, undefined, { skill: "listening" }),
+    ],
+  },
+  {
+    id: "l-talk-econ", title: "Academic Talk: Anchoring", type: "lecture", discipline: "economics", lvl: 70,
+    voices: [{ name: "Lecturer", accent: "en-IN", gender: "m" }],
+    lines: [
+      { v: 0, t: "Imagine I ask you to write down the last two digits of your phone number, and then ask how much you'd pay for a bottle of wine. Logically, the two should be unrelated. Yet in a number of classroom experiments, people with higher numbers have tended to offer more. This is an example of what psychologists call anchoring: an initial number, even an irrelevant one, pulls subsequent estimates towards it." },
+      { v: 0, t: "Now, I want to be careful here. Some of the most dramatic anchoring results have not replicated well, and the size of the effect varies a great deal between studies. What does seem robust is the weaker claim: when people are uncertain, a salient number in their environment can bias their estimates." },
+      { v: 0, t: "Why does this matter for economics? Consider salary negotiations. The first figure mentioned often shapes the range that follows. Or think about retail: a 'reduced from' price gives you a reference point that makes the current price feel like a bargain, regardless of what the item is actually worth." },
+      { v: 0, t: "The policy implication is subtle. We can't eliminate anchors; numbers are everywhere. But we can be aware of who sets them, and in negotiations, it's often an advantage to be the one who goes first, provided your anchor is plausible. An absurd anchor may simply be ignored, or worse, damage your credibility." },
+    ],
+    questions: [
+      mcq("lae1", "ls:gist", 66, "What is the main idea of the talk?", ["Initial numbers can bias later estimates, with important practical consequences", "Phone numbers predict wine prices", "Economists should ignore psychology", "All anchoring studies have failed"], 0, "", [null, "A literal misreading of the example.", "Out of scope.", "Too extreme: the weaker claim is robust."], [null, "word-match", "out-of-scope", "too-extreme"], { skill: "listening" }),
+      mcq("lae2", "ls:attitude", 70, "What is the lecturer's attitude toward the most dramatic anchoring results?", ["Cautious, because some have not replicated", "Fully confident", "Dismissive of all anchoring research", "Uninterested"], 0, "*I want to be careful here…*", undefined, undefined, { skill: "listening" }),
+      mcq("lae3", "ls:purpose", 68, "Why does the lecturer mention 'reduced from' prices?", ["To give a real-world example of anchoring", "To criticise retailers", "To explain inflation", "To show that anchors are always irrelevant"], 0, "", undefined, undefined, { skill: "listening" }),
+      mcq("lae4", "ls:inference", 72, "According to the lecturer, when is going first in a negotiation an advantage?", ["When the opening figure is plausible", "Always", "Only in retail", "When the other side is uncertain about you"], 0, "*Provided your anchor is plausible.*", [null, "The condition is ignored.", "Not stated.", "Not the condition given."], [null, "too-extreme", "out-of-scope", "over-inference"], { skill: "listening" }),
+    ],
+  },
+  {
+    id: "l-responses", title: "Choose a Response (campus life)", type: "short", discipline: "everyday", lvl: 56,
+    voices: [{ name: "Speaker", accent: "en-US", gender: "m" }],
+    lines: [
+      { v: 0, t: "Number one. I was thinking of skipping the review session tomorrow. Is it worth going?" },
+      { v: 0, t: "Number two. Sorry, is this seat taken?" },
+      { v: 0, t: "Number three. You couldn't lend me your notes from Tuesday, could you?" },
+      { v: 0, t: "Number four. I can't believe the deadline got moved again." },
+    ],
+    note: "Formato inspirado en la tarea 'Listen and Choose a Response' del TOEFL iBT (2026). Escucha cada enunciado y elige la respuesta más natural.",
+    questions: [
+      mcq("lr1", "ls:response", 56, "1. Choose the best response.", ["Definitely — she usually hints at what's on the exam.", "Yes, it's tomorrow.", "I skipped breakfast too.", "The session was reviewed."], 0, "The question asks for advice about value; A gives a reason. B repeats information; C word-matches *skipping*; D is nonsensical.", [null, "Repeats known information.", "Word match.", "Word match."], [null, "wrong-focus", "word-match", "word-match"], { skill: "listening" }),
+      mcq("lr2", "ls:response", 54, "2. Choose the best response.", ["No, go ahead.", "Yes, I took it.", "It's very comfortable.", "Taken by whom?"], 0, "*Is this seat taken?* → *No, go ahead* (= you can sit). B misinterprets *taken*.", [null, "Literal misreading of *taken*.", "Irrelevant.", "Unnatural."], [null, "word-match", "wrong-focus", null], { skill: "listening" }),
+      mcq("lr3", "ls:response", 58, "3. Choose the best response.", ["Sure, I'll send you a copy tonight.", "No, I couldn't.", "Tuesday is fine for me.", "I lent them yesterday."], 0, "*You couldn't… could you?* is a polite request; the natural reply grants (or refuses) it.", [null, "Echoes the form, not the function.", "Word match with *Tuesday*.", "Irrelevant."], [null, "word-match", "word-match", null], { skill: "listening" }),
+      mcq("lr4", "ls:response", 58, "4. Choose the best response.", ["I know — it's making planning really hard.", "Yes, I moved it.", "Where did it go?", "Deadlines are important."], 0, "The speaker expresses frustration; the best reply aligns with that feeling.", [null, "Misattributes the action.", "Literal reading of *moved*.", "Generic."], [null, "reversed", "word-match", "too-general"], { skill: "listening" }),
+    ],
+  },
+];
